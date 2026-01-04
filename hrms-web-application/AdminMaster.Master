@@ -352,7 +352,7 @@
 														<li><a href="project-report.html">Project Report</a></li>
 														<li><a href="task-report.html">Task Report</a></li>
 														<li><a href="user-report.html">User Report</a></li>
-														<li><a href="employee-report.html" class="active">Employee Report</a></li>
+														<li><a href="EmployeeReport.aspx" class="active">Employee Report</a></li>
 														<li><a href="payslip-report.html">Payslip Report</a></li>
 														<li><a href="attendance-report.html">Attendance Report</a></li>
 														<li><a href="leave-report.html">Leave Report</a></li>
@@ -1294,13 +1294,13 @@
 								<span class="menu-arrow"></span>
 				</a>
 				<ul>
-								<li><a href="projects-grid.html">Employee Report</a></li>
-								<li><a href="tasks.html">Attendance Report</a></li>
-								<li><a href="task-board.html">Leave Report</a></li>
-						        <li><a href="projects-grid.html">Payslip Report</a></li>
-								<li><a href="tasks.html">Project Report</a></li>
-								<li><a href="task-board.html">Task Report</a></li>
-					            <li><a href="task-board.html">Daily Report</a></li>
+								<li><a href="EmployeeReport.aspx">Employee Report</a></li>
+								<li><a href="AttendenaceReport.aspx">Attendance Report</a></li>
+								<li><a href="LeaveReport.aspx">Leave Report</a></li>
+						        <li><a href="PaySlipReports.aspx">Payslip Report</a></li>
+								<li><a href="ProjectReport.aspx">Project Report</a></li>
+								<li><a href="TaskReport.aspx">Task Report</a></li>
+					            <li><a href="DailyReport.aspx">Daily Report</a></li>
 				</ul>
 </li>
 
@@ -3749,7 +3749,3 @@
 
 </body>
 </html>
-
-
-
-

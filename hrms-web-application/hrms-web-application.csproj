@@ -67,19 +67,69 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AttendenaceReport.aspx" />
+    <Content Include="DailyReport.aspx" />
+    <Content Include="EmployeeReport.aspx" />
+    <Content Include="LeaveReport.aspx" />
+    <Content Include="PaySlipReports.aspx" />
+    <Content Include="TaskReport.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdminMaster.Master.cs">
+      <DependentUpon>AdminMaster.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AdminMaster.Master.designer.cs">
+      <DependentUpon>AdminMaster.Master</DependentUpon>
+    </Compile>
+    <Compile Include="AttendenaceReport.aspx.cs">
+      <DependentUpon>AttendenaceReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AttendenaceReport.aspx.designer.cs">
+      <DependentUpon>AttendenaceReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="DailyReport.aspx.cs">
+      <DependentUpon>DailyReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DailyReport.aspx.designer.cs">
+      <DependentUpon>DailyReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EmployeeReport.aspx.cs">
+      <DependentUpon>EmployeeReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EmployeeReport.aspx.designer.cs">
+      <DependentUpon>EmployeeReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="LeaveReport.aspx.cs">
+      <DependentUpon>LeaveReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="LeaveReport.aspx.designer.cs">
+      <DependentUpon>LeaveReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PaySlipReports.aspx.cs">
+      <DependentUpon>PaySlipReports.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PaySlipReports.aspx.designer.cs">
+      <DependentUpon>PaySlipReports.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TaskReport.aspx.cs">
+      <DependentUpon>TaskReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TaskReport.aspx.designer.cs">
+      <DependentUpon>TaskReport.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AdminMaster.Master" />
     <None Include="packages.config" />
-    <None Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
-    <None Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
