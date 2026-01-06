@@ -1,0 +1,24 @@
+﻿# Build output
+bin/
+obj/
+
+# Visual Studio files
+.vs/
+*.user
+*.suo
+
+# ASP.NET temp files
+Temporary ASP.NET Files/
+
+# NuGet
+packages/
+
+# Logs
+*.log
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Ignore local web.config (everyone has different config)
+web.config
