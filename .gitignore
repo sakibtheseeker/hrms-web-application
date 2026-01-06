@@ -6,7 +6,6 @@ obj/
 .vs/
 *.user
 *.suo
-.vsconfig
 
 # ASP.NET temp files
 Temporary ASP.NET Files/
@@ -17,14 +16,11 @@ packages/
 # Logs
 *.log
 
-# Cache files
-*.cache
-
 # OS files
 Thumbs.db
 .DS_Store
 
-# Ignore local web.config (machine specific)
+# Ignore local web.config (everyone has different config)
 web.config
 
 # Visual Studio layout files
