@@ -33,7 +33,7 @@
 </div>
 
 <asp:SqlDataSource ID="dsSummary" runat="server"
-    ConnectionString="<%$ ConnectionStrings:dbconn %>"
+    ConnectionString="<%$ ConnectionStrings:Pulse360DB %>"
     SelectCommand="GetEmployeeLeaveSummary"
     SelectCommandType="StoredProcedure">
     <SelectParameters>
@@ -65,7 +65,7 @@
 </div>
 
 <asp:SqlDataSource ID="SqlDataSourceLeaveRequests" runat="server"
-    ConnectionString="<%$ ConnectionStrings:dbconn %>"
+    ConnectionString="<%$ ConnectionStrings:Pulse360DB %>"
     SelectCommand="GetMyLeaveRequests"
     SelectCommandType="StoredProcedure">
     <SelectParameters>
@@ -125,7 +125,7 @@
 </div>
 
 <asp:SqlDataSource ID="dsLeaveTypes" runat="server"
-    ConnectionString="<%$ ConnectionStrings:dbconn %>"
+    ConnectionString="<%$ ConnectionStrings:Pulse360DB %>"
     SelectCommand="GetEmployeeLeaveTypes"
     SelectCommandType="StoredProcedure">
     <SelectParameters>

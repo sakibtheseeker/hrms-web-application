@@ -15,7 +15,7 @@
         DataSourceID="SqlDataSource1" DataTextField="Name" DataValueField="DepartmentId">
     </asp:DropDownList>  
     <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
-        ConnectionString="<%$ ConnectionStrings:dbconn %>" 
+        ConnectionString="<%$ ConnectionStrings:Pulse360DB %>" 
         SelectCommand="SELECT [DepartmentId], [Name] FROM [Departments] WHERE ([Status] = @Status)">
         <SelectParameters>
             <asp:Parameter DefaultValue="Active" Name="Status" Type="String" />
@@ -29,7 +29,7 @@
         DataSourceID="SqlDataSource2" DataTextField="LeaveType" DataValueField="LeaveTypeId">
     </asp:DropDownList>
     <asp:SqlDataSource ID="SqlDataSource2" runat="server" 
-        ConnectionString="<%$ ConnectionStrings:dbconn %>" 
+        ConnectionString="<%$ ConnectionStrings:Pulse360DB %>" 
         SelectCommand="SELECT [LeaveTypeId], [LeaveType] FROM [MasterLeaveTypes] WHERE ([status] = @status)">
         <SelectParameters>
             <asp:Parameter DefaultValue="Active" Name="status" Type="String" />

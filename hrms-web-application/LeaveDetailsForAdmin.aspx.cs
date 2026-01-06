@@ -9,7 +9,7 @@ namespace hrms_web_application.Employee.Leave
 {
     public partial class LeaveDetails : System.Web.UI.Page
     {
-        string str = ConfigurationManager.ConnectionStrings["dbconn"].ConnectionString;
+        string str = ConfigurationManager.ConnectionStrings["Pulse360DB"].ConnectionString;
 
         protected void Page_Load(object sender, EventArgs e)
         {

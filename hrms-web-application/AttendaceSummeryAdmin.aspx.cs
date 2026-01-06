@@ -12,7 +12,7 @@ namespace hrms_web_application.Admin.Attendance
     {
 
 
-        string cs = ConfigurationManager.ConnectionStrings["dbconn"].ConnectionString;
+        string cs = ConfigurationManager.ConnectionStrings["Pulse360DB"].ConnectionString;
 
         protected void Page_Load(object sender, EventArgs e)
         {

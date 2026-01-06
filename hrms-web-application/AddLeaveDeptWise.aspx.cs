@@ -10,7 +10,7 @@ namespace hrms_web_application.Admin.Attendance.Leave
     public partial class AllocateLeaveDeptWise : Page
     {
         SqlConnection conn;
-        string str = ConfigurationManager.ConnectionStrings["dbconn"].ConnectionString.ToString();
+        string str = ConfigurationManager.ConnectionStrings["Pulse360DB"].ConnectionString.ToString();
         protected void Page_Load(object sender, EventArgs e)
         {
             conn=new SqlConnection(str);

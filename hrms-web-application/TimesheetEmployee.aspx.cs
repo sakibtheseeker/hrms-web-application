@@ -7,7 +7,7 @@ namespace hrms_web_application.Employee.Attendance
 {
     public partial class Timesheet : System.Web.UI.Page
     {
-        string cs = ConfigurationManager.ConnectionStrings["dbconn"].ConnectionString;
+        string cs = ConfigurationManager.ConnectionStrings["Pulse360DB"].ConnectionString;
 
         protected void Page_Load(object sender, EventArgs e)
         {

@@ -14,7 +14,7 @@ namespace hrms_web_application
 {
     public partial class EmployeeAttendance : System.Web.UI.Page
     {
-        string cs = ConfigurationManager.ConnectionStrings["dbconn"].ConnectionString;
+        string cs = ConfigurationManager.ConnectionStrings["Pulse360DB"].ConnectionString;
         public string ChartLabels { get; set; } = "[]";
         public string ChartValues { get; set; } = "[]";
 

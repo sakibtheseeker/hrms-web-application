@@ -76,7 +76,7 @@
 </asp:GridView>
 
 
-    <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:dbconn %>" SelectCommand="SELECT [LeaveTypeId], [LeaveType], [status] FROM [MasterLeaveTypes]"></asp:SqlDataSource>
+    <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:Pulse360DB %>" SelectCommand="SELECT [LeaveTypeId], [LeaveType], [status] FROM [MasterLeaveTypes]"></asp:SqlDataSource>
     <!-- Script -->
     <script>
         function openModal() {

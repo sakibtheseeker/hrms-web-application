@@ -42,7 +42,7 @@
 </asp:GridView>
 
         <asp:SqlDataSource ID="SqlDataSource1" runat="server"
-            ConnectionString="<%$ ConnectionStrings:dbconn %>"
+            ConnectionString="<%$ ConnectionStrings:Pulse360DB %>"
             SelectCommand="FeatchDeptLeavesDetails"
             SelectCommandType="StoredProcedure">
         </asp:SqlDataSource>

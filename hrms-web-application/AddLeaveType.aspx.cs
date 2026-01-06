@@ -10,7 +10,7 @@ namespace hrms_web_application.Admin.Attendance.Leave
     public partial class AddLeaveType : System.Web.UI.Page
     {
         SqlConnection conn;
-        string str = ConfigurationManager.ConnectionStrings["dbconn"].ConnectionString;
+        string str = ConfigurationManager.ConnectionStrings["Pulse360DB"].ConnectionString;
 
         protected void Page_Load(object sender, EventArgs e)
         {
