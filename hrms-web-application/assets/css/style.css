@@ -14970,6 +14970,8 @@ button.swal2-cancel {
   position: relative;
   display: flex;
   align-items: center;
+    top: 0px;
+    left: 0px;
 }
 .sidebar .sidebar-menu > ul li.menu-title span {
   flex-shrink: 0;
