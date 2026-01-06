@@ -11,35 +11,8 @@ namespace hrms_web_application
 {
 
 
-    public partial class EmployeeTickets
+    public partial class AdminAssignTickets
     {
-
-        /// <summary>
-        /// txtTitle control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtTitle;
-
-        /// <summary>
-        /// fuAttachment control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.FileUpload fuAttachment;
-
-        /// <summary>
-        /// btnRaiseTicket control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnRaiseTicket;
 
         /// <summary>
         /// gvTickets control.
@@ -51,12 +24,48 @@ namespace hrms_web_application
         protected global::System.Web.UI.WebControls.GridView gvTickets;
 
         /// <summary>
-        /// rptReplies control.
+        /// hfTicketId control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptReplies;
+        protected global::System.Web.UI.WebControls.HiddenField hfTicketId;
+
+        /// <summary>
+        /// ddlDepartment control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlDepartment;
+
+        /// <summary>
+        /// ddlDesignation control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlDesignation;
+
+        /// <summary>
+        /// ddlEmployee control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlEmployee;
+
+        /// <summary>
+        /// btnAssign control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnAssign;
     }
 }

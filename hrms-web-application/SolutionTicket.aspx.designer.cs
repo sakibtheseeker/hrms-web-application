@@ -11,44 +11,26 @@ namespace hrms_web_application
 {
 
 
-    public partial class EmployeeTickets
+    public partial class SolutionTicket
     {
 
         /// <summary>
-        /// txtTitle control.
+        /// gvAssignedTickets control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtTitle;
+        protected global::System.Web.UI.WebControls.GridView gvAssignedTickets;
 
         /// <summary>
-        /// fuAttachment control.
+        /// hfTicketId control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.FileUpload fuAttachment;
-
-        /// <summary>
-        /// btnRaiseTicket control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnRaiseTicket;
-
-        /// <summary>
-        /// gvTickets control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvTickets;
+        protected global::System.Web.UI.WebControls.HiddenField hfTicketId;
 
         /// <summary>
         /// rptReplies control.
@@ -58,5 +40,41 @@ namespace hrms_web_application
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Repeater rptReplies;
+
+        /// <summary>
+        /// txtSolution control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtSolution;
+
+        /// <summary>
+        /// fuSolutionAttachment control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.FileUpload fuSolutionAttachment;
+
+        /// <summary>
+        /// btnSubmitSolution control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSubmitSolution;
+
+        /// <summary>
+        /// btnCloseTicket control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCloseTicket;
     }
 }

@@ -19,92 +19,58 @@ namespace hrms_web_application
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
-            {
                 LoadMyTickets();
-            }
         }
 
-        // ================= Raise Ticket =================
         protected void btnRaiseTicket_Click(object sender, EventArgs e)
         {
-            // -------- MINIMUM VALIDATIONS --------
             if (txtTitle.Text.Trim() == "")
             {
-                ShowAlert("Ticket title is required");
-                return;
-            }
-
-            if (txtSubject.Text.Trim() == "")
-            {
-                ShowAlert("Subject is required");
-                return;
-            }
-
-            if (txtDescription.Text.Trim() == "")
-            {
-                ShowAlert("Description is required");
+                Alert("Ticket Title is required");
                 return;
             }
 
             int userId = Convert.ToInt32(Session["UserId"]);
 
-            // -------- Attachment Handling --------
-            string filePath = "";
+            // (Attachment save – optional, future ready)
             if (fuAttachment.HasFile)
             {
-                string folderPath = Server.MapPath("~/TicketAttachments/");
-                if (!Directory.Exists(folderPath))
-                {
-                    Directory.CreateDirectory(folderPath);
-                }
+                string folder = Server.MapPath("~/TicketAttachments/");
+                if (!Directory.Exists(folder))
+                    Directory.CreateDirectory(folder);
 
                 string fileName = Guid.NewGuid() + "_" + fuAttachment.FileName;
-                filePath = "~/TicketAttachments/" + fileName;
-                fuAttachment.SaveAs(Server.MapPath(filePath));
+                fuAttachment.SaveAs(folder + fileName);
             }
 
-            // -------- Insert Ticket --------
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlCommand cmd = new SqlCommand(@"
-                    INSERT INTO Tickets
-                    (TicketTitle, EventCategory, Subject, AssignedBy, AssignedTo,
-                     TicketDescription, Priority, Status, Visibility, CreatedAt)
-                    VALUES
-                    (@Title, @Category, @Subject, NULL, NULL,
-                     @Description, @Priority, 'Open', 'Private', GETDATE())", con);
-
-                cmd.Parameters.AddWithValue("@Title", txtTitle.Text.Trim());
-                cmd.Parameters.AddWithValue("@Category", ddlCategory.SelectedValue);
-                cmd.Parameters.AddWithValue("@Subject", txtSubject.Text.Trim());
-                cmd.Parameters.AddWithValue("@Description", txtDescription.Text.Trim());
-                cmd.Parameters.AddWithValue("@Priority", ddlPriority.SelectedValue);
+                SqlCommand cmd = new SqlCommand("sp_Employee_RaiseTicket", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@TicketTitle", txtTitle.Text.Trim());
+                cmd.Parameters.AddWithValue("@CreatedBy", userId);
 
                 con.Open();
                 cmd.ExecuteNonQuery();
             }
 
-            ClearForm();
+            txtTitle.Text = "";
             LoadMyTickets();
-            ShowAlert("Ticket raised successfully");
+            Alert("Ticket raised successfully");
         }
 
-        // ================= Load Employee Tickets =================
         private void LoadMyTickets()
         {
             int userId = Convert.ToInt32(Session["UserId"]);
 
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlDataAdapter da = new SqlDataAdapter(@"
-                    SELECT TicketId, TicketTitle, Subject, Status
-                    FROM Tickets
-                    WHERE CreatedBy = @UserId
-                    ORDER BY CreatedAt DESC", con);
+                SqlCommand cmd = new SqlCommand("sp_Employee_GetMyTickets", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@UserId", userId);
 
-                da.SelectCommand.Parameters.AddWithValue("@UserId", userId);
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
-
                 da.Fill(dt);
 
                 gvTickets.DataSource = dt;
@@ -112,20 +78,45 @@ namespace hrms_web_application
             }
         }
 
-        // ================= Helpers =================
-        private void ClearForm()
+        protected void gvTickets_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            txtTitle.Text = "";
-            txtSubject.Text = "";
-            txtDescription.Text = "";
-            ddlCategory.SelectedIndex = 0;
-            ddlPriority.SelectedIndex = 0;
+            if (e.CommandName == "ViewTicket")
+            {
+                int ticketId = Convert.ToInt32(e.CommandArgument);
+                LoadTicketReplies(ticketId);
+
+                ClientScript.RegisterStartupScript(
+                    this.GetType(),
+                    "popup",
+                    "$('#ticketModal').modal('show');",
+                    true);
+            }
         }
 
-        private void ShowAlert(string msg)
+        private void LoadTicketReplies(int ticketId)
         {
-            ClientScript.RegisterStartupScript(this.GetType(),
-                "alert", $"alert('{msg}');", true);
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                SqlCommand cmd = new SqlCommand("sp_Employee_GetTicketReplies", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@TicketId", ticketId);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                rptReplies.DataSource = dt;
+                rptReplies.DataBind();
+            }
+        }
+
+        private void Alert(string msg)
+        {
+            ClientScript.RegisterStartupScript(
+                this.GetType(),
+                "alert",
+                $"alert('{msg}');",
+                true);
         }
     }
 }
