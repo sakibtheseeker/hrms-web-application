@@ -22,3 +22,8 @@ Thumbs.db
 
 # Ignore local web.config (everyone has different config)
 web.config
+
+# Visual Studio layout files
+DocumentLayout.json
+dbcache.json
+dtbcache.json
