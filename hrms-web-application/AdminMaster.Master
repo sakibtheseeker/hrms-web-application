@@ -1298,7 +1298,7 @@
 								<li><a href="AttendenaceReport.aspx">Attendance Report</a></li>
 								<li><a href="LeaveReport.aspx">Leave Report</a></li>
 						        <li><a href="PaySlipReports.aspx">Payslip Report</a></li>
-								<li><a href="ProjectReport.aspx">Project Report</a></li>
+								<li><a href="ProjectReports.aspx">Project Report</a></li>
 								<li><a href="TaskReport.aspx">Task Report</a></li>
 					            <li><a href="DailyReport.aspx">Daily Report</a></li>
 				</ul>
