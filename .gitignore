@@ -7,6 +7,17 @@ obj/
 *.user
 *.suo
 
+# Visual Studio
+.vs/
+*.csproj.user
+
+# Build output
+bin/
+obj/
+Debug/
+Release/
+
+*.cache
 # ASP.NET temp files
 Temporary ASP.NET Files/
 
