@@ -2199,6 +2199,7 @@
     </Compile>
     <Compile Include="EditProject.aspx.designer.cs">
       <DependentUpon>EditProject.aspx</DependentUpon>
+       </Compile>
     <Compile Include="EmployeeDashboard.aspx.cs">
       <DependentUpon>EmployeeDashboard.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
