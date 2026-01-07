@@ -2097,6 +2097,7 @@
     </Compile>
     <Compile Include="AdminAssignTickets.aspx.designer.cs">
       <DependentUpon>AdminAssignTickets.aspx</DependentUpon>
+      </Compile>
     <Content Include="Content\Logos\logo1.png" />
     <Content Include="Content\Logos\rt1.png" />
     <Content Include="Content\Logos\rt2.png" />
