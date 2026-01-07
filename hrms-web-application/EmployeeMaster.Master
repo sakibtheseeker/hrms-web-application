@@ -1107,7 +1107,7 @@
 								 <span class="menu-arrow"></span>
 				                       </a>
 				                 <ul>
-								<li><a href="employee-salary.html">Events</a></li>
+								<li><a href="CalendarEvent.aspx">Events</a></li>
 							
 				                 </ul>
                                  </li>

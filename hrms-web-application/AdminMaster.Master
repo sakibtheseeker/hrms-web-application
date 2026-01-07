@@ -56,6 +56,7 @@
 	<!-- Main CSS -->
 	<link rel="stylesheet" href="assets/css/style.css">
 
+<<<<<<< HEAD
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
@@ -115,6 +116,18 @@
     }
 
 </script>
+=======
+
+	<!-- Datatable CSS -->
+<link rel="stylesheet" href="assets/css/dataTables.bootstrap5.min.css">
+
+<!-- DataTables Buttons CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css">
+
+<!-- Select2 CSS -->
+<link rel="stylesheet" href="assets/plugins/select2/css/select2.min.css">
+
+>>>>>>> 0a1e07a3a983928a44b84cce0b08d1afe8375715
 </head>
 
 <body>
@@ -1317,9 +1330,9 @@
 								<span class="menu-arrow"></span>
 				</a>
 				<ul>
-								<li><a href="training.html">Add Event</a></li>
-								<li><a href="trainers.html">Add Master Event</a></li>
-								<li><a href="training-type.html">Event List</a></li>
+								<li><a href="AddEvent.aspx">Add Event</a></li>
+								<li><a href="AddMasterEvent.aspx">Add Master Event</a></li>
+								<li><a href="EventList.aspx">Event List</a></li>
 				</ul>
 </li>
 						<!-- Training -->
@@ -1365,9 +1378,8 @@
 										<span class="menu-arrow"></span>
 									</a>
 									<ul>
-										<li><a href="projects-grid.html">Projects</a></li>
-										<li><a href="tasks.html">Tasks</a></li>
-										<li><a href="task-board.html">TaskBoard</a></li>
+										<li><a href="ProjectList.aspx">Projects</a></li>
+										<li><a href="TaskList.aspx">Tasks</a></li>
 									</ul>
 								</li>
 						<!-- Reports -->
@@ -3821,7 +3833,7 @@
 
 	<!-- Bootstrap Tagsinput JS -->
 	<script src="assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
-
+	
 	<!-- Chart JS -->
 	<script src="assets/plugins/apexchart/apexcharts.min.js"></script>
 	<script src="assets/plugins/apexchart/chart-data.js"></script>
@@ -3829,6 +3841,20 @@
 	<!-- Custom JS -->
 	<script src="assets/js/theme-colorpicker.js"></script>
 	<script src="assets/js/script.js"></script>
+
+	<!--->
+	<!-- DataTables Buttons Extension -->
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap5.min.js"></script>
+
+<!-- PDF Export -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+
+<!-- Excel Export -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
 
 </body>
 </html>
