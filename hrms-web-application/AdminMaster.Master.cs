@@ -13,9 +13,30 @@ namespace hrms_web_application
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            LoadHeaderUser();
             if (!IsPostBack)
             {
-                LoadHeaderUser();
+                
+            }
+        }
+
+        protected string GetPriorityBadge(object priority)
+        {
+            if (priority == null || priority == DBNull.Value)
+                return "badge bg-secondary";
+
+            string p = priority.ToString().ToLower();
+
+            switch (p)
+            {
+                case "high":
+                    return "badge bg-danger";
+                case "medium":
+                    return "badge bg-warning";
+                case "low":
+                    return "badge bg-success";
+                default:
+                    return "badge bg-secondary";
             }
         }
 
@@ -61,16 +82,20 @@ namespace hrms_web_application
 
                     if (!string.IsNullOrWhiteSpace(imgPath))
                     {
-                        imgProfileHeader.ImageUrl = imgPath;
-                        imgProfileLarge.ImageUrl = imgPath;
+                        if (!imgPath.StartsWith("/"))
+                            imgPath = "/Content/uploads/" + imgPath;
+
+                        Session["Epath"] = imgPath;
+                        Session["Name"] = dr["FirstName"] + " " + dr["LastName"];
+
+                        imgProfileHeader.ImageUrl = ResolveUrl(imgPath);
+                        imgProfileLarge.ImageUrl = ResolveUrl(imgPath);
                     }
                     else
                     {
-                        imgProfileHeader.ImageUrl =
-                            "/assets/img/profiles/default.png";
-                        imgProfileLarge.ImageUrl =
-                            "/assets/img/profiles/default.png";
+                        Session["Epath"] = "/assets/img/profiles/default.png";
                     }
+
                 }
             }
         }

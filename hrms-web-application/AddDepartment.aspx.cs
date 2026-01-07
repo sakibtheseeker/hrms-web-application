@@ -41,45 +41,38 @@ namespace hrms_web_application
         {
             List<DepartmentDTO> list = new List<DepartmentDTO>();
 
-            string cs = ConfigurationManager.ConnectionStrings["Pulse360DB"].ConnectionString;
+            string cs = ConfigurationManager
+                        .ConnectionStrings["Pulse360DB"]
+                        .ConnectionString;
 
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlCommand cmd = new SqlCommand(@"
-            SELECT DepartmentId, Name, NoOfEmployee, Status, CreatedBy, ModifiedBy
-            FROM Departments
-            ORDER BY DepartmentId DESC", con);
-
-                con.Open();
-                SqlDataReader dr = cmd.ExecuteReader();
-
-                while (dr.Read())
+                using (SqlCommand cmd = new SqlCommand("GetAllDepartments", con))
                 {
-                    list.Add(new DepartmentDTO
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    con.Open();
+                    using (SqlDataReader dr = cmd.ExecuteReader())
                     {
-                        DepartmentId = Convert.ToInt32(dr["DepartmentId"]),
-                        Name = dr["Name"]?.ToString(),
-
-                        // ✅ HANDLE NULLS SAFELY
-                        NoOfEmployee = dr["NoOfEmployee"] == DBNull.Value
-                            ? 0
-                            : Convert.ToInt32(dr["NoOfEmployee"]),
-
-                        Status = dr["Status"]?.ToString(),
-
-                        CreatedBy = dr["CreatedBy"] == DBNull.Value
-                            ? ""
-                            : dr["CreatedBy"].ToString(),
-
-                        ModifiedBy = dr["ModifiedBy"] == DBNull.Value
-                            ? ""
-                            : dr["ModifiedBy"].ToString()
-                    });
+                        while (dr.Read())
+                        {
+                            list.Add(new DepartmentDTO
+                            {
+                                DepartmentId = Convert.ToInt32(dr["DepartmentId"]),
+                                Name = dr["Name"].ToString(),
+                                NoOfEmployee = Convert.ToInt32(dr["NoOfEmployee"]),
+                                Status = dr["Status"].ToString(),
+                                CreatedBy = dr["CreatedBy"].ToString(),
+                                ModifiedBy = dr["ModifiedBy"].ToString()
+                            });
+                        }
+                    }
                 }
             }
 
             return list;
         }
+
 
         [WebMethod]
         [System.Web.Script.Services.ScriptMethod(ResponseFormat =
@@ -89,25 +82,29 @@ namespace hrms_web_application
             DepartmentDTO d = null;
 
             string cs = ConfigurationManager
-                .ConnectionStrings["Pulse360DB"].ConnectionString;
+                .ConnectionStrings["Pulse360DB"]
+                .ConnectionString;
 
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlCommand cmd = new SqlCommand(
-                    "SELECT DepartmentId, Name, Status FROM Departments WHERE DepartmentId = @Id", con);
-
-                cmd.Parameters.AddWithValue("@Id", departmentId);
-                con.Open();
-
-                SqlDataReader dr = cmd.ExecuteReader();
-                if (dr.Read())
+                using (SqlCommand cmd = new SqlCommand("GetDepartmentById", con))
                 {
-                    d = new DepartmentDTO
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@DepartmentId", departmentId);
+
+                    con.Open();
+                    using (SqlDataReader dr = cmd.ExecuteReader())
                     {
-                        DepartmentId = Convert.ToInt32(dr["DepartmentId"]),
-                        Name = dr["Name"].ToString(),
-                        Status = dr["Status"].ToString()
-                    };
+                        if (dr.Read())
+                        {
+                            d = new DepartmentDTO
+                            {
+                                DepartmentId = Convert.ToInt32(dr["DepartmentId"]),
+                                Name = dr["Name"].ToString(),
+                                Status = dr["Status"].ToString()
+                            };
+                        }
+                    }
                 }
             }
 
@@ -116,25 +113,31 @@ namespace hrms_web_application
 
 
 
+
         // ===================== ADD DEPARTMENT =====================
         [WebMethod]
         public static string AddNewDepartment(string name, string status)
         {
+            string cs = ConfigurationManager
+                .ConnectionStrings["Pulse360DB"]
+                .ConnectionString;
+
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlCommand cmd = new SqlCommand(@"
-            INSERT INTO Departments
-                (Name, Status, NoOfEmployee, CreatedBy, CreatedAt)
-            VALUES
-                (@Name, @Status, 0, 'Admin', GETDATE())", con);
+                using (SqlCommand cmd = new SqlCommand("AddNewDepartment", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@Name", name.Trim());
-                cmd.Parameters.AddWithValue("@Status", status);
+                    cmd.Parameters.AddWithValue("@Name", name.Trim());
+                    cmd.Parameters.AddWithValue("@Status", status);
+                    cmd.Parameters.AddWithValue(
+                        "@CreatedBy",
+                        HttpContext.Current.Session["UserName"]?.ToString() ?? "Admin"
+                    );
 
-                con.Open();
-                cmd.ExecuteNonQuery();
-
-                
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
             }
 
             return "success";
@@ -142,73 +145,91 @@ namespace hrms_web_application
 
 
 
+
         // ===================== UPDATE DEPARTMENT =====================
         [WebMethod]
         public static string UpdateDepartment(int departmentId, string name, string status)
         {
+            string cs = ConfigurationManager
+                .ConnectionStrings["Pulse360DB"]
+                .ConnectionString;
+
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlCommand cmd = new SqlCommand(@"
-            UPDATE Departments
-            SET
-                Name = @Name,
-                Status = @Status,
-                ModifiedBy = 'Admin',
-                ModifiedAt = GETDATE()
-            WHERE DepartmentId = @Id", con);
+                using (SqlCommand cmd = new SqlCommand("UpdateDepartment", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@Id", departmentId);
-                cmd.Parameters.AddWithValue("@Name", name.Trim());
-                cmd.Parameters.AddWithValue("@Status", status);
+                    cmd.Parameters.AddWithValue("@DepartmentId", departmentId);
+                    cmd.Parameters.AddWithValue("@Name", name.Trim());
+                    cmd.Parameters.AddWithValue("@Status", status);
+                    cmd.Parameters.AddWithValue(
+                        "@ModifiedBy",
+                        HttpContext.Current.Session["UserName"]?.ToString() ?? "Admin"
+                    );
 
-                con.Open();
-                cmd.ExecuteNonQuery();
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
             }
 
             return "updated";
         }
 
 
+
         // ===================== DELETE DEPARTMENT =====================
         [WebMethod]
         public static string DeleteDepartment(int departmentId)
         {
+            string cs = ConfigurationManager
+                .ConnectionStrings["Pulse360DB"]
+                .ConnectionString;
+
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlCommand cmd = new SqlCommand(
-                    "DELETE FROM Departments WHERE DepartmentId = @Id", con);
+                using (SqlCommand cmd = new SqlCommand("DeleteDepartment", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@DepartmentId", departmentId);
 
-                cmd.Parameters.AddWithValue("@Id", departmentId);
-
-                con.Open();
-                cmd.ExecuteNonQuery();
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
             }
 
             return "deleted";
         }
 
+
         // ===================== TOGGLE STATUS =====================
         [WebMethod]
         public static string ToggleDepartmentStatus(int departmentId)
         {
+            string cs = ConfigurationManager
+                .ConnectionStrings["Pulse360DB"]
+                .ConnectionString;
+
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlCommand cmd = new SqlCommand(@"
-                    UPDATE Departments
-                    SET Status = CASE 
-                        WHEN Status = 'Active' THEN 'Inactive'
-                        ELSE 'Active'
-                    END
-                    WHERE DepartmentId = @Id", con);
+                using (SqlCommand cmd = new SqlCommand("ToggleDepartmentStatus", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@Id", departmentId);
+                    cmd.Parameters.AddWithValue("@DepartmentId", departmentId);
+                    cmd.Parameters.AddWithValue(
+                        "@ModifiedBy",
+                        HttpContext.Current.Session["UserName"]?.ToString() ?? "Admin"
+                    );
 
-                con.Open();
-                cmd.ExecuteNonQuery();
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
             }
 
             return "toggled";
         }
+
 
         public class DepartmentDTO
         {

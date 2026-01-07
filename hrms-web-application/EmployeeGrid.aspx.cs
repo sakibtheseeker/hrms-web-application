@@ -29,25 +29,25 @@ namespace hrms_web_application
         {
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlCommand cmd = new SqlCommand(@"
-                    SELECT
-                        COUNT(*) AS Total,
-                        SUM(CASE WHEN Status = 'Active' THEN 1 ELSE 0 END) AS ActiveCount,
-                        SUM(CASE WHEN Status = 'Inactive' THEN 1 ELSE 0 END) AS InactiveCount,
-                        SUM(CASE WHEN DateOfJoining >= DATEADD(DAY,-30,GETDATE()) THEN 1 ELSE 0 END) AS NewJoiners
-                    FROM [User]", con);
-
-                con.Open();
-                SqlDataReader dr = cmd.ExecuteReader();
-                if (dr.Read())
+                using (SqlCommand cmd = new SqlCommand("GetUserStatisticsSummary", con))
                 {
-                    litTotal.Text = dr["Total"].ToString();
-                    litActive.Text = dr["ActiveCount"].ToString();
-                    litInactive.Text = dr["InactiveCount"].ToString();
-                    litNewJoiners.Text = dr["NewJoiners"].ToString();
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    con.Open();
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.Read())
+                        {
+                            litTotal.Text = dr["Total"].ToString();
+                            litActive.Text = dr["ActiveCount"].ToString();
+                            litInactive.Text = dr["InactiveCount"].ToString();
+                            litNewJoiners.Text = dr["NewJoiners"].ToString();
+                        }
+                    }
                 }
             }
         }
+
 
         /* ========================= LOAD EMPLOYEES ========================= */
         private void LoadEmployees()
@@ -56,49 +56,39 @@ namespace hrms_web_application
 
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlCommand cmd = new SqlCommand(@"
-            SELECT 
-                u.UserId,
-                u.FirstName,
-                u.LastName,
-                u.ProfilePicture,
-                u.DesignationtId AS DesignationId,
-                des.Name AS DesignationName
-            FROM [User] u
-            LEFT JOIN Designations des 
-                ON u.DesignationtId = des.DesignationId
-            WHERE u.Status = 'Active'
-            ORDER BY u.UserId DESC
-        ", con);
-
-                con.Open();
-                SqlDataReader dr = cmd.ExecuteReader();
-
-                while (dr.Read())
+                using (SqlCommand cmd = new SqlCommand("GetActiveEmployeesWithDesignation", con))
                 {
-                    list.Add(new EmployeeDTO
-                    {
-                        UserId = Convert.ToInt32(dr["UserId"]),
-                        FirstName = dr["FirstName"].ToString(),
-                        LastName = dr["LastName"].ToString(),
-                        ProfilePicture = dr["ProfilePicture"] == DBNull.Value
-                                            ? "/assets/img/profiles/default-avatar.jpg"
-                                            : dr["ProfilePicture"].ToString(),
-                        DesignationId = dr["DesignationId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["DesignationId"]),
-                        DesignationName = dr["DesignationName"]?.ToString(),
+                    cmd.CommandType = CommandType.StoredProcedure;
 
-                        // 🔹 TEMPORARY DASHBOARD VALUES
-                        TotalProjects = 0,
-                        CompletedTasks = 0,
-                        InProgressTasks = 0,
-                        Productivity = 0
-                    });
+                    con.Open();
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            list.Add(new EmployeeDTO
+                            {
+                                UserId = Convert.ToInt32(dr["UserId"]),
+                                FirstName = dr["FirstName"].ToString(),
+                                LastName = dr["LastName"].ToString(),
+                                ProfilePicture = dr["ProfilePicture"].ToString(),
+                                DesignationId = Convert.ToInt32(dr["DesignationId"]),
+                                DesignationName = dr["DesignationName"].ToString(),
+
+                                // 🔹 TEMPORARY DASHBOARD VALUES
+                                TotalProjects = 0,
+                                CompletedTasks = 0,
+                                InProgressTasks = 0,
+                                Productivity = 0
+                            });
+                        }
+                    }
                 }
             }
 
             rptEmployees.DataSource = list;
             rptEmployees.DataBind();
         }
+
 
 
 
@@ -110,18 +100,27 @@ namespace hrms_web_application
 
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlCommand cmd = new SqlCommand(
-                    "SELECT DesignationId, Name FROM Designations WHERE Status='Active'", con);
-
-                con.Open();
-                SqlDataReader dr = cmd.ExecuteReader();
-                while (dr.Read())
+                using (SqlCommand cmd = new SqlCommand("GetActiveDesignationsForDropdown", con))
                 {
-                    ddlDesignationFilter.Items.Add(
-                        new ListItem(dr["Name"].ToString(), dr["DesignationId"].ToString()));
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    con.Open();
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            ddlDesignationFilter.Items.Add(
+                                new ListItem(
+                                    dr["Name"].ToString(),
+                                    dr["DesignationId"].ToString()
+                                )
+                            );
+                        }
+                    }
                 }
             }
         }
+
 
         /* ========================= ADD / EDIT DROPDOWNS ========================= */
         private void LoadDropdowns()
@@ -142,18 +141,26 @@ namespace hrms_web_application
 
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlCommand cmd = new SqlCommand(
-                    "SELECT RoleId, RoleName FROM Role WHERE Status='Active'", con);
-
-                con.Open();
-                SqlDataReader dr = cmd.ExecuteReader();
-                while (dr.Read())
+                using (SqlCommand cmd = new SqlCommand("GetActiveRolesForDropdown", con))
                 {
-                    ddlRoleAdd.Items.Add(new ListItem(dr["RoleName"].ToString(), dr["RoleId"].ToString()));
-                    ddlRoleEdit.Items.Add(new ListItem(dr["RoleName"].ToString(), dr["RoleId"].ToString()));
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    con.Open();
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            string text = dr["RoleName"].ToString();
+                            string value = dr["RoleId"].ToString();
+
+                            ddlRoleAdd.Items.Add(new ListItem(text, value));
+                            ddlRoleEdit.Items.Add(new ListItem(text, value));
+                        }
+                    }
                 }
             }
         }
+
 
         private void LoadDepartments()
         {
@@ -165,18 +172,26 @@ namespace hrms_web_application
 
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlCommand cmd = new SqlCommand(
-                    "SELECT DepartmentId, Name FROM Departments WHERE Status='Active'", con);
-
-                con.Open();
-                SqlDataReader dr = cmd.ExecuteReader();
-                while (dr.Read())
+                using (SqlCommand cmd = new SqlCommand("GetActiveDepartmentsForDropdown", con))
                 {
-                    ddlDepartmentAdd.Items.Add(new ListItem(dr["Name"].ToString(), dr["DepartmentId"].ToString()));
-                    ddlDepartmentEdit.Items.Add(new ListItem(dr["Name"].ToString(), dr["DepartmentId"].ToString()));
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    con.Open();
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            string text = dr["Name"].ToString();
+                            string value = dr["DepartmentId"].ToString();
+
+                            ddlDepartmentAdd.Items.Add(new ListItem(text, value));
+                            ddlDepartmentEdit.Items.Add(new ListItem(text, value));
+                        }
+                    }
                 }
             }
         }
+
 
         private void LoadDesignations()
         {
@@ -211,30 +226,26 @@ namespace hrms_web_application
 
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlCommand cmd = new SqlCommand(@"
-            SELECT DISTINCT
-                m.UserId,
-                m.FirstName + ' ' + m.LastName AS Name
-            FROM [User] m
-            INNER JOIN [User] e
-                ON e.ReportingManager = m.UserId
-            WHERE m.Status = 'Active'
-            ORDER BY Name
-        ", con);
-
-                con.Open();
-                SqlDataReader dr = cmd.ExecuteReader();
-
-                while (dr.Read())
+                using (SqlCommand cmd = new SqlCommand("GetActiveManagersForDropdown", con))
                 {
-                    string name = dr["Name"].ToString();
-                    string id = dr["UserId"].ToString();
+                    cmd.CommandType = CommandType.StoredProcedure;
 
-                    ddlManagerAdd.Items.Add(new ListItem(name, id));
-                    ddlManagerEdit.Items.Add(new ListItem(name, id));
+                    con.Open();
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            string name = dr["Name"].ToString();
+                            string id = dr["UserId"].ToString();
+
+                            ddlManagerAdd.Items.Add(new ListItem(name, id));
+                            ddlManagerEdit.Items.Add(new ListItem(name, id));
+                        }
+                    }
                 }
             }
         }
+
 
 
         /* ========================= DTO ========================= */

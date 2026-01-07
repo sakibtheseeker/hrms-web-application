@@ -46,63 +46,46 @@ namespace hrms_web_application
         {
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlCommand cmd = new SqlCommand(@"
-                    SELECT
-                        COUNT(*) AS Total,
-                        SUM(CASE WHEN Status='Active' THEN 1 ELSE 0 END) AS ActiveCount,
-                        SUM(CASE WHEN Status='Inactive' THEN 1 ELSE 0 END) AS InactiveCount
-                    FROM [User]
-                    WHERE RoleId != 1", con);
-
-                con.Open();
-                SqlDataReader dr = cmd.ExecuteReader();
-                if (dr.Read())
+                using (SqlCommand cmd = new SqlCommand("GetUserStatusCounts", con))
                 {
-                    lblTotalCount.Text = dr["Total"].ToString();
-                    lblActiveCount.Text = dr["ActiveCount"].ToString();
-                    lblInactiveCount.Text = dr["InactiveCount"].ToString();
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    con.Open();
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.Read())
+                        {
+                            lblTotalCount.Text = dr["Total"].ToString();
+                            lblActiveCount.Text = dr["ActiveCount"].ToString();
+                            lblInactiveCount.Text = dr["InactiveCount"].ToString();
+                        }
+                    }
                 }
             }
         }
+
 
         // ===================== BIND EMPLOYEES =====================
         private void BindEmployees()
         {
             using (SqlConnection con = new SqlConnection(cs))
             {
-                string query = @"
-                    SELECT
-                        u.UserId,
-                        u.FirstName,
-                        u.LastName,
-                        u.Email,
-                        u.PhoneNumber,
-                        u.ProfilePicture,
-                        u.DateOfJoining,
-                        u.Status,
-                        r.RoleName,
-                        d.Name AS DepartmentName,
-                        des.Name AS DesignationName,
-                        ISNULL(mgr.FirstName + ' ' + mgr.LastName, 'N/A') AS ReportingManagerName
-                    FROM [User] u
-                    LEFT JOIN Role r ON u.RoleId = r.RoleId
-                    LEFT JOIN Departments d ON u.DepartmentId = d.DepartmentId
-                    LEFT JOIN Designations des ON u.DesignationtId = des.DesignationId
-                    LEFT JOIN [User] mgr ON u.ReportingManager = mgr.UserId
-                    WHERE u.RoleId != 3  -- Exclude Admin
-                    ORDER BY u.FirstName ASC";
+                using (SqlDataAdapter da = new SqlDataAdapter("GetEmployeesList", con))
+                {
+                    da.SelectCommand.CommandType = CommandType.StoredProcedure;
 
-                SqlDataAdapter da = new SqlDataAdapter(query, con);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
 
-                rptEmployeesTable.DataSource = dt;
-                rptEmployeesTable.DataBind();
+                    rptEmployeesTable.DataSource = dt;
+                    rptEmployeesTable.DataBind();
 
-                rptEmployeesGrid.DataSource = dt;
-                rptEmployeesGrid.DataBind();
+                    rptEmployeesGrid.DataSource = dt;
+                    rptEmployeesGrid.DataBind();
+                }
             }
         }
+
 
         // ===================== TOGGLE STATUS (Single Method) =====================
         protected void ToggleStatus_Click(object sender, EventArgs e)
@@ -112,41 +95,42 @@ namespace hrms_web_application
 
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlCommand cmd = new SqlCommand(@"
-            UPDATE [User]
-            SET Status = CASE WHEN Status = 'Active' THEN 'Inactive' ELSE 'Active' END
-            WHERE UserId = @UserId", con);
+                using (SqlCommand cmd = new SqlCommand("ToggleUserStatus", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@UserId", userId);
 
-                cmd.Parameters.AddWithValue("@UserId", userId);
-                con.Open();
-                cmd.ExecuteNonQuery();
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
             }
 
             BindCounts();
             BindEmployees();
         }
 
+
         [WebMethod]
         [System.Web.Script.Services.ScriptMethod(ResponseFormat = System.Web.Script.Services.ResponseFormat.Json)]
         public static void ToggleEmployeeStatus(int userId)
         {
-            string cs = ConfigurationManager.ConnectionStrings["Pulse360DB"].ConnectionString;
+            string cs = ConfigurationManager
+                .ConnectionStrings["Pulse360DB"]
+                .ConnectionString;
 
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlCommand cmd = new SqlCommand(@"
-            UPDATE [User]
-            SET Status = CASE 
-                WHEN Status = 'Active' THEN 'Inactive'
-                ELSE 'Active'
-            END
-            WHERE UserId = @UserId", con);
+                using (SqlCommand cmd = new SqlCommand("ToggleEmployeeStatus", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@UserId", userId);
 
-                cmd.Parameters.AddWithValue("@UserId", userId);
-                con.Open();
-                cmd.ExecuteNonQuery();
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
+
 
 
         // ===================== DROPDOWNS =====================
@@ -154,72 +138,86 @@ namespace hrms_web_application
         {
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlDataAdapter da = new SqlDataAdapter("SELECT RoleId, RoleName FROM Role", con);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
+                using (SqlDataAdapter da = new SqlDataAdapter("GetAllRolesForDropdown", con))
+                {
+                    da.SelectCommand.CommandType = CommandType.StoredProcedure;
 
-                ddlRole.DataSource = dt;
-                ddlRole.DataTextField = "RoleName";
-                ddlRole.DataValueField = "RoleId";
-                ddlRole.DataBind();
-                ddlRole.Items.Insert(0, new ListItem("-- Select Role --", "0"));
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    ddlRole.DataSource = dt;
+                    ddlRole.DataTextField = "RoleName";
+                    ddlRole.DataValueField = "RoleId";
+                    ddlRole.DataBind();
+                    ddlRole.Items.Insert(0, new ListItem("-- Select Role --", "0"));
+                }
             }
         }
+
 
         private void BindDepartments()
         {
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlDataAdapter da = new SqlDataAdapter("SELECT DepartmentId, Name FROM Departments", con);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
+                using (SqlDataAdapter da = new SqlDataAdapter("GetAllDepartmentsForDropdown", con))
+                {
+                    da.SelectCommand.CommandType = CommandType.StoredProcedure;
 
-                ddlDepartment.DataSource = dt;
-                ddlDepartment.DataTextField = "Name";
-                ddlDepartment.DataValueField = "DepartmentId";
-                ddlDepartment.DataBind();
-                ddlDepartment.Items.Insert(0, new ListItem("-- Select Department --", "0"));
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    ddlDepartment.DataSource = dt;
+                    ddlDepartment.DataTextField = "Name";
+                    ddlDepartment.DataValueField = "DepartmentId";
+                    ddlDepartment.DataBind();
+                    ddlDepartment.Items.Insert(0, new ListItem("-- Select Department --", "0"));
+                }
             }
         }
+
 
         private void BindDesignations(int departmentId)
         {
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlDataAdapter da = new SqlDataAdapter(
-                    "SELECT DesignationId, Name FROM Designations WHERE DepartmentId = @DeptId", con);
-                da.SelectCommand.Parameters.AddWithValue("@DeptId", departmentId);
+                using (SqlDataAdapter da = new SqlDataAdapter("GetDesignationsByDepartment", con))
+                {
+                    da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                    da.SelectCommand.Parameters.AddWithValue("@DeptId", departmentId);
 
-                DataTable dt = new DataTable();
-                da.Fill(dt);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
 
-                ddlDesignation.DataSource = dt;
-                ddlDesignation.DataTextField = "Name";
-                ddlDesignation.DataValueField = "DesignationId";
-                ddlDesignation.DataBind();
-                ddlDesignation.Items.Insert(0, new ListItem("-- Select Designation --", "0"));
+                    ddlDesignation.DataSource = dt;
+                    ddlDesignation.DataTextField = "Name";
+                    ddlDesignation.DataValueField = "DesignationId";
+                    ddlDesignation.DataBind();
+                    ddlDesignation.Items.Insert(0, new ListItem("-- Select Designation --", "0"));
+                }
             }
         }
+
 
         private void BindManagers()
         {
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlDataAdapter da = new SqlDataAdapter(@"
-                    SELECT UserId, FirstName + ' ' + LastName AS Name
-                    FROM [User]
-                    WHERE Status = 'Active' AND RoleId = (SELECT RoleId FROM Role WHERE RoleName = 'Employee')", con);
+                using (SqlDataAdapter da = new SqlDataAdapter("GetActiveManagers", con))
+                {
+                    da.SelectCommand.CommandType = CommandType.StoredProcedure;
 
-                DataTable dt = new DataTable();
-                da.Fill(dt);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
 
-                ddlManager.DataSource = dt;
-                ddlManager.DataTextField = "Name";
-                ddlManager.DataValueField = "UserId";
-                ddlManager.DataBind();
-                ddlManager.Items.Insert(0, new ListItem("-- Select Manager --", "0"));
+                    ddlManager.DataSource = dt;
+                    ddlManager.DataTextField = "Name";
+                    ddlManager.DataValueField = "UserId";
+                    ddlManager.DataBind();
+                    ddlManager.Items.Insert(0, new ListItem("-- Select Manager --", "0"));
+                }
             }
         }
+
 
         // ===================== MODAL EVENTS =====================
         protected void ddlRole_SelectedIndexChanged(object sender, EventArgs e)
@@ -262,44 +260,67 @@ namespace hrms_web_application
 
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlCommand cmd = new SqlCommand(@"
-                    INSERT INTO [User] 
-                    (FirstName, LastName, Email, PasswordHash, PhoneNumber, RoleId, DepartmentId, 
-                     DesignationtId, ReportingManager, DateOfJoining, DateOfBirth, Gender, 
-                     Address, AboutEmployee, Status, ProfilePicture)
-                    VALUES 
-                    (@FirstName, @LastName, @Email, @Password, @Phone, @RoleId, @DeptId, 
-                     @DesigId, @ManagerId, @DOJ, @DOB, @Gender, @Address, @About, @Status, @Profile)", con);
+                using (SqlCommand cmd = new SqlCommand("AddEmployee", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@FirstName", txtFirstName.Text.Trim());
-                cmd.Parameters.AddWithValue("@LastName", txtLastName.Text.Trim());
-                cmd.Parameters.AddWithValue("@Email", txtEmail.Text.Trim());
-                cmd.Parameters.AddWithValue("@Password", txtPassword.Text.Trim()); // TODO: Hash this!
-                cmd.Parameters.AddWithValue("@Phone", txtPhone.Text.Trim());
-                cmd.Parameters.AddWithValue("@RoleId", ddlRole.SelectedValue);
-                cmd.Parameters.AddWithValue("@DeptId", ddlDepartment.SelectedValue == "0" ? (object)DBNull.Value : ddlDepartment.SelectedValue);
-                cmd.Parameters.AddWithValue("@DesigId", ddlDesignation.SelectedValue == "0" ? (object)DBNull.Value : ddlDesignation.SelectedValue);
-                cmd.Parameters.AddWithValue("@ManagerId",
-                    managerContainer.Visible && ddlManager.SelectedValue != "0"
-                    ? ddlManager.SelectedValue
-                    : (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@DOJ", DateTime.Parse(txtDOJ.Text));
-                cmd.Parameters.AddWithValue("@DOB", DateTime.Parse(txtDOB.Text));
-                cmd.Parameters.AddWithValue("@Gender", ddlGender.SelectedValue);
-                cmd.Parameters.AddWithValue("@Address", txtAddress.Text.Trim());
-                cmd.Parameters.AddWithValue("@About", txtAbout.Text.Trim());
-                cmd.Parameters.AddWithValue("@Status", ddlStatusAdd.SelectedValue);
-                cmd.Parameters.AddWithValue("@Profile", imagePath);
+                    cmd.Parameters.AddWithValue("@FirstName", txtFirstName.Text.Trim());
+                    cmd.Parameters.AddWithValue("@LastName", txtLastName.Text.Trim());
+                    cmd.Parameters.AddWithValue("@Email", txtEmail.Text.Trim());
+                    cmd.Parameters.AddWithValue("@PasswordHash", txtPassword.Text.Trim()); // TODO: hash
+                    cmd.Parameters.AddWithValue("@PhoneNumber", txtPhone.Text.Trim());
+                    cmd.Parameters.AddWithValue("@RoleId", Convert.ToInt32(ddlRole.SelectedValue));
 
-                con.Open();
-                cmd.ExecuteNonQuery();
+                    cmd.Parameters.AddWithValue(
+                        "@DepartmentId",
+                        ddlDepartment.SelectedValue == "0"
+                            ? (object)DBNull.Value
+                            : Convert.ToInt32(ddlDepartment.SelectedValue)
+                    );
+
+                    cmd.Parameters.AddWithValue(
+                        "@DesignationtId",
+                        ddlDesignation.SelectedValue == "0"
+                            ? (object)DBNull.Value
+                            : Convert.ToInt32(ddlDesignation.SelectedValue)
+                    );
+
+                    cmd.Parameters.AddWithValue(
+                        "@ReportingManager",
+                        managerContainer.Visible && ddlManager.SelectedValue != "0"
+                            ? Convert.ToInt32(ddlManager.SelectedValue)
+                            : (object)DBNull.Value
+                    );
+
+                    cmd.Parameters.AddWithValue("@DateOfJoining", DateTime.Parse(txtDOJ.Text));
+                    cmd.Parameters.AddWithValue("@DateOfBirth", DateTime.Parse(txtDOB.Text));
+                    cmd.Parameters.AddWithValue("@Gender", ddlGender.SelectedValue);
+                    cmd.Parameters.AddWithValue("@Address", txtAddress.Text.Trim());
+                    cmd.Parameters.AddWithValue("@AboutEmployee", txtAbout.Text.Trim());
+                    cmd.Parameters.AddWithValue("@ProfilePicture", imagePath);
+                    cmd.Parameters.AddWithValue("@Status", ddlStatusAdd.SelectedValue);
+
+                    cmd.Parameters.AddWithValue(
+                        "@CreatedBy",
+                        Session["UserName"]?.ToString() ?? "Admin"
+                    );
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
             }
 
             BindCounts();
             BindEmployees();
 
-            ScriptManager.RegisterStartupScript(this, GetType(), "closeModal",
-                "$('#exampleModal').modal('hide'); alert('Employee added successfully!');", true);
+            ScriptManager.RegisterStartupScript(
+                this,
+                GetType(),
+                "closeModal",
+                "$('#exampleModal').modal('hide'); alert('Employee added successfully!');",
+                true
+            );
         }
+
     }
 }

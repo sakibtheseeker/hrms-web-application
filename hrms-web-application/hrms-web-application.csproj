@@ -117,6 +117,10 @@
     <Content Include="AddProject.aspx" />
     <Content Include="AddTask.aspx" />
     <Content Include="AdminAssignTickets.aspx" />
+    <Content Include="AddDepartment.aspx" />
+    <Content Include="AddDesignation.aspx" />
+    <Content Include="AddRole.aspx" />
+    <Content Include="AdminDashboard.aspx" />
     <Content Include="assets\css\animate.css" />
     <Content Include="assets\css\bootstrap-datetimepicker.min.css" />
     <Content Include="assets\css\bootstrap.min.css" />
@@ -1052,8 +1056,16 @@
     <Content Include="assets\js\counter.js" />
     <Content Include="assets\js\custom-select2.js" />
     <Content Include="assets\js\dataTables.bootstrap5.min.js" />
+<<<<<<< Updated upstream
     <Content Include="assets\js\email.js" />
     <Content Include="assets\js\employee-salary.js" />
+=======
+    <Content Include="assets\js\departments.js" />
+    <Content Include="assets\js\designation.js" />
+    <Content Include="assets\js\email.js" />
+    <Content Include="assets\js\employee-salary.js" />
+    <Content Include="assets\js\employeesbydepartment.js" />
+>>>>>>> Stashed changes
     <Content Include="assets\js\estimates.js" />
     <Content Include="assets\js\feather.min.js" />
     <Content Include="assets\js\file-manager.js" />
@@ -1089,6 +1101,10 @@
     <Content Include="assets\js\projects.js" />
     <Content Include="assets\js\quill-editor.js" />
     <Content Include="assets\js\ratings.js" />
+<<<<<<< Updated upstream
+=======
+    <Content Include="assets\js\role.js" />
+>>>>>>> Stashed changes
     <Content Include="assets\js\russia.js" />
     <Content Include="assets\js\salary-settings.js" />
     <Content Include="assets\js\script.js" />
@@ -2043,6 +2059,7 @@
     <Content Include="assets\plugins\twitter-bootstrap-wizard\form-wizard.js" />
     <Content Include="assets\plugins\twitter-bootstrap-wizard\jquery.bootstrap.wizard.min.js" />
     <Content Include="assets\plugins\twitter-bootstrap-wizard\prettify.js" />
+<<<<<<< Updated upstream
     <Content Include="CalendarEvent.aspx" />
     <Content Include="EditProject.aspx" />
     <Content Include="EmployeeTickets.aspx" />
@@ -2087,6 +2104,89 @@
     </Compile>
     <Compile Include="AdminAssignTickets.aspx.designer.cs">
       <DependentUpon>AdminAssignTickets.aspx</DependentUpon>
+=======
+    <Content Include="Content\Logos\logo1.png" />
+    <Content Include="Content\Logos\rt1.png" />
+    <Content Include="Content\Logos\rt2.png" />
+    <Content Include="Content\Logos\rt3.png" />
+    <Content Include="Content\Logos\rt4.png" />
+    <Content Include="Content\Logos\t1.png" />
+    <Content Include="Content\Logos\t2.png" />
+    <Content Include="Content\Logos\t3.png" />
+    <Content Include="Content\Logos\t4.png" />
+    <Content Include="Content\profilePhoto\profile pic.png" />
+    <Content Include="Content\uploads\17a2ad8d-b45c-42d2-8ec2-9bfc959484e8.png" />
+    <Content Include="Content\uploads\2fd928a5-2967-4bdd-aa01-22af7fe196fc.jpeg" />
+    <Content Include="Content\uploads\3e43c397-9efb-4fea-a0e3-965d6888f539.png" />
+    <Content Include="Content\uploads\4.jpeg" />
+    <Content Include="Content\uploads\40c33cb6-b2e8-47e7-98ff-8326fde41b93.jpeg" />
+    <Content Include="Content\uploads\510e8f86-c443-446f-adff-d0f66892b2ec.jpeg" />
+    <Content Include="Content\uploads\5879339-middle.png" />
+    <Content Include="Content\uploads\678a9e03-d4e0-4573-9ae6-2f642d6a29cf.png" />
+    <Content Include="Content\uploads\6d4dc04a-e547-43ac-be82-2b2f9e6d45cd.png" />
+    <Content Include="Content\uploads\99780f37-8842-4655-86a7-64e374c88928.png" />
+    <Content Include="Content\uploads\bank letter_199.jpg" />
+    <Content Include="Content\uploads\BK.PNG" />
+    <Content Include="Content\uploads\buyer 99_1.jpg" />
+    <Content Include="Content\uploads\corbel.png" />
+    <Content Include="Content\uploads\da9a7b94-ec03-444d-a035-fac51edc00b7.png" />
+    <Content Include="Content\uploads\dsp.png" />
+    <Content Include="Content\uploads\e38983f8-e60e-4a31-b788-ea89034d9971.png" />
+    <Content Include="Content\uploads\FLAVEX PDF_1.jpg" />
+    <Content Include="Content\uploads\krish sign.png" />
+    <Content Include="Content\uploads\ME2.jpeg" />
+    <Content Include="Content\uploads\Sa.jpg" />
+    <Content Include="Content\uploads\Screenshot 2025-01-01 112359.png" />
+    <Content Include="Content\uploads\Screenshot 2025-01-15 015445.png" />
+    <Content Include="Content\uploads\unnamed.png" />
+    <Content Include="Content\uploads\user_1.png" />
+    <Content Include="Content\uploads\user_35.jpeg" />
+    <Content Include="Content\uploads\user_36.jpg" />
+    <Content Include="Content\uploads\user_37.jpg" />
+    <Content Include="Content\uploads\user_38.jpg" />
+    <Content Include="Content\uploads\user_40.jpeg" />
+    <Content Include="Content\uploads\user_42.jpg" />
+    <Content Include="Content\uploads\user_43.jpg" />
+    <Content Include="Content\uploads\WhatsApp Image 2024-12-31 at 12.13.41 PM %281%29.jpeg" />
+    <Content Include="Content\uploads\WhatsApp Image 2025-02-16 at 3.56.28 PM.jpeg" />
+    <Content Include="Content\uploads\whatsapp-dp-stylish-killer-attitude-cute-cartoon-girl.jpeg" />
+    <Content Include="EmployeeDashboard.aspx" />
+    <Content Include="EmployeeGrid.aspx" />
+    <Content Include="EmployeeList.aspx" />
+    <Content Include="favicon.ico" />
+    <Content Include="Login.aspx" />
+    <Content Include="UserProfile.aspx" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AddDepartment.aspx.cs">
+      <DependentUpon>AddDepartment.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AddDepartment.aspx.designer.cs">
+      <DependentUpon>AddDepartment.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AddDesignation.aspx.cs">
+      <DependentUpon>AddDesignation.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AddDesignation.aspx.designer.cs">
+      <DependentUpon>AddDesignation.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AddRole.aspx.cs">
+      <DependentUpon>AddRole.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AddRole.aspx.designer.cs">
+      <DependentUpon>AddRole.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AdminDashboard.aspx.cs">
+      <DependentUpon>AdminDashboard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AdminDashboard.aspx.designer.cs">
+      <DependentUpon>AdminDashboard.aspx</DependentUpon>
+>>>>>>> Stashed changes
     </Compile>
     <Compile Include="AdminMaster.Master.cs">
       <DependentUpon>AdminMaster.Master</DependentUpon>
@@ -2095,6 +2195,7 @@
     <Compile Include="AdminMaster.Master.designer.cs">
       <DependentUpon>AdminMaster.Master</DependentUpon>
     </Compile>
+<<<<<<< Updated upstream
     <Compile Include="CalendarEvent.aspx.cs">
       <DependentUpon>CalendarEvent.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2108,6 +2209,28 @@
     </Compile>
     <Compile Include="EditProject.aspx.designer.cs">
       <DependentUpon>EditProject.aspx</DependentUpon>
+=======
+    <Compile Include="EmployeeDashboard.aspx.cs">
+      <DependentUpon>EmployeeDashboard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EmployeeDashboard.aspx.designer.cs">
+      <DependentUpon>EmployeeDashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EmployeeGrid.aspx.cs">
+      <DependentUpon>EmployeeGrid.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EmployeeGrid.aspx.designer.cs">
+      <DependentUpon>EmployeeGrid.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EmployeeList.aspx.cs">
+      <DependentUpon>EmployeeList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EmployeeList.aspx.designer.cs">
+      <DependentUpon>EmployeeList.aspx</DependentUpon>
+>>>>>>> Stashed changes
     </Compile>
     <Compile Include="EmployeeMaster.Master.cs">
       <DependentUpon>EmployeeMaster.Master</DependentUpon>
@@ -2116,6 +2239,7 @@
     <Compile Include="EmployeeMaster.Master.designer.cs">
       <DependentUpon>EmployeeMaster.Master</DependentUpon>
     </Compile>
+<<<<<<< Updated upstream
     <Compile Include="EmployeeTickets.aspx.cs">
       <DependentUpon>EmployeeTickets.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2156,6 +2280,25 @@
   <ItemGroup>
     <Content Include="AdminMaster.Master" />
     <Content Include="EmployeeMaster.Master" />
+=======
+    <Compile Include="Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserProfile.aspx.cs">
+      <DependentUpon>UserProfile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserProfile.aspx.designer.cs">
+      <DependentUpon>UserProfile.aspx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+>>>>>>> Stashed changes
     <Content Include="assets\css\bootstrap.min.css.map" />
     <Content Include="assets\css\bootstrap.rtl.min.css.map" />
     <Content Include="assets\css\style.css.map" />
@@ -11735,6 +11878,22 @@
     <Content Include="assets\scss\vendors\_datatables.scss" />
     <Content Include="assets\scss\vendors\_rangepicker-plugin.scss" />
     <Content Include="assets\scss\vendors\_select2.scss" />
+<<<<<<< Updated upstream
+=======
+    <Content Include="Content\Logos.zip" />
+    <Content Include="Content\offer-letters\Offer-letter15782767.pdf" />
+    <Content Include="Content\offer-letters\Offer-letter32087786.pdf" />
+    <Content Include="Content\offer-letters\Offer-letter4551229.pdf" />
+    <Content Include="Content\offer-letters\Offer-letter47836274.pdf" />
+    <Content Include="Content\offer-letters\Offer-letter49122204.pdf" />
+    <Content Include="Content\offer-letters\Offer-letter6742785.pdf" />
+    <Content Include="Content\offer-letters\Offer-letter8596193.pdf" />
+    <Content Include="Content\resignation-letters\Resignation-letter20187016.pdf" />
+    <Content Include="Content\resignation-letters\Resignation-letter24250372.pdf" />
+    <Content Include="Content\resignation-letters\Resignation-letter4307704.pdf" />
+    <Content Include="AdminMaster.Master" />
+    <Content Include="EmployeeMaster.Master" />
+>>>>>>> Stashed changes
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

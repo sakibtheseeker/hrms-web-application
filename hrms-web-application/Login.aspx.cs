@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using System.Web;
 
@@ -18,49 +19,45 @@ namespace hrms_web_application
 
             using (SqlConnection con = new SqlConnection(connStr))
             {
-                SqlCommand cmd = new SqlCommand(@"
-                    SELECT UserId,
-                           FirstName,
-                           LastName,
-                           RoleId,
-                           Status
-                    FROM [User]
-                    WHERE Email = @Email
-                      AND PasswordHash = @Password", con);
-
-                cmd.Parameters.AddWithValue("@Email", email);
-                cmd.Parameters.AddWithValue("@Password", password);
-
-                con.Open();
-
-                using (SqlDataReader dr = cmd.ExecuteReader())
+                using (SqlCommand cmd = new SqlCommand("AuthenticateUser", con))
                 {
-                    if (!dr.Read())
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@Email", email);
+                    cmd.Parameters.AddWithValue("@PasswordHash", password); // TODO: hash
+
+                    con.Open();
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
                     {
-                        ShowError("Invalid email or password");
-                        return;
+                        if (!dr.Read())
+                        {
+                            ShowError("Invalid email or password");
+                            return;
+                        }
+
+                        string status = dr["Status"].ToString();
+
+                        // ❌ block inactive users
+                        if (!status.Equals("Active", StringComparison.OrdinalIgnoreCase))
+                        {
+                            ShowError("Your account is inactive. Contact admin.");
+                            return;
+                        }
+
+                        // ✅ session
+                        Session["UserId"] = dr["UserId"];
+                        Session["UserName"] = dr["FirstName"] + " " + dr["LastName"];
+                        Session["Email"] = email;
+                        Session["RoleId"] = dr["RoleId"];
+
+                        int roleId = Convert.ToInt32(dr["RoleId"]);
+                        RedirectByRole(roleId);
                     }
-
-                    string status = dr["Status"].ToString();
-
-                    // ❌ block inactive users
-                    if (!status.Equals("Active", StringComparison.OrdinalIgnoreCase))
-                    {
-                        ShowError("Your account is inactive. Contact admin.");
-                        return;
-                    }
-
-                    // ✅ session
-                    Session["UserId"] = dr["UserId"];
-                    Session["UserName"] = dr["FirstName"] + " " + dr["LastName"];
-                    Session["Email"] = email;
-                    Session["RoleId"] = dr["RoleId"];
-
-                    int roleId = Convert.ToInt32(dr["RoleId"]);
-                    RedirectByRole(roleId);
                 }
             }
         }
+
 
         private void RedirectByRole(int roleId)
         {

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
+using System.Web;
 using System.Web.Services;
 using System.Web.UI;
 
@@ -24,31 +26,37 @@ namespace hrms_web_application
         {
             List<RoleDTO> list = new List<RoleDTO>();
 
+            string cs = ConfigurationManager
+                .ConnectionStrings["Pulse360DB"]
+                .ConnectionString;
+
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlCommand cmd = new SqlCommand(@"
-                    SELECT RoleId, RoleName, Status, CreatedBy, ModifiedBy
-                    FROM Role
-                    ORDER BY RoleId DESC", con);
-
-                con.Open();
-                SqlDataReader dr = cmd.ExecuteReader();
-
-                while (dr.Read())
+                using (SqlCommand cmd = new SqlCommand("GetAllRoles", con))
                 {
-                    list.Add(new RoleDTO
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    con.Open();
+                    using (SqlDataReader dr = cmd.ExecuteReader())
                     {
-                        RoleId = Convert.ToInt32(dr["RoleId"]),
-                        RoleName = dr["RoleName"].ToString(),
-                        Status = dr["Status"].ToString(),
-                        CreatedBy = dr["CreatedBy"] == DBNull.Value ? "" : dr["CreatedBy"].ToString(),
-                        ModifiedBy = dr["ModifiedBy"] == DBNull.Value ? "" : dr["ModifiedBy"].ToString()
-                    });
+                        while (dr.Read())
+                        {
+                            list.Add(new RoleDTO
+                            {
+                                RoleId = Convert.ToInt32(dr["RoleId"]),
+                                RoleName = dr["RoleName"].ToString(),
+                                Status = dr["Status"].ToString(),
+                                CreatedBy = dr["CreatedBy"].ToString(),
+                                ModifiedBy = dr["ModifiedBy"].ToString()
+                            });
+                        }
+                    }
                 }
             }
 
             return list;
         }
+
 
         // ===================== GET ROLE BY ID =====================
         [WebMethod(EnableSession = true)]
@@ -56,123 +64,155 @@ namespace hrms_web_application
         {
             RoleDTO role = null;
 
+            string cs = ConfigurationManager
+                .ConnectionStrings["Pulse360DB"]
+                .ConnectionString;
+
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlCommand cmd = new SqlCommand(@"
-                    SELECT RoleId, RoleName, Status
-                    FROM Role
-                    WHERE RoleId = @Id", con);
-
-                cmd.Parameters.AddWithValue("@Id", roleId);
-                con.Open();
-
-                SqlDataReader dr = cmd.ExecuteReader();
-                if (dr.Read())
+                using (SqlCommand cmd = new SqlCommand("GetRoleById", con))
                 {
-                    role = new RoleDTO
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@RoleId", roleId);
+
+                    con.Open();
+                    using (SqlDataReader dr = cmd.ExecuteReader())
                     {
-                        RoleId = Convert.ToInt32(dr["RoleId"]),
-                        RoleName = dr["RoleName"].ToString(),
-                        Status = dr["Status"].ToString()
-                    };
+                        if (dr.Read())
+                        {
+                            role = new RoleDTO
+                            {
+                                RoleId = Convert.ToInt32(dr["RoleId"]),
+                                RoleName = dr["RoleName"].ToString(),
+                                Status = dr["Status"].ToString()
+                            };
+                        }
+                    }
                 }
             }
 
             return role;
         }
 
+
         // ===================== ADD ROLE =====================
         [WebMethod(EnableSession = true)]
         public static string AddNewRole(string roleName, string status)
         {
+            string cs = ConfigurationManager
+                .ConnectionStrings["Pulse360DB"]
+                .ConnectionString;
+
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlCommand cmd = new SqlCommand(@"
-                    INSERT INTO Role
-                        (RoleName, Status, CreatedBy, CreatedAt)
-                    VALUES
-                        (@RoleName, @Status, 'Admin', GETDATE())", con);
+                using (SqlCommand cmd = new SqlCommand("AddNewRole", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@RoleName", roleName.Trim());
-                cmd.Parameters.AddWithValue("@Status", status);
+                    cmd.Parameters.AddWithValue("@RoleName", roleName.Trim());
+                    cmd.Parameters.AddWithValue("@Status", status);
+                    cmd.Parameters.AddWithValue(
+                        "@CreatedBy",
+                        HttpContext.Current.Session["UserName"]?.ToString() ?? "Admin"
+                    );
 
-                con.Open();
-                cmd.ExecuteNonQuery();
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
             }
 
             return "success";
         }
 
+
         // ===================== UPDATE ROLE =====================
         [WebMethod(EnableSession = true)]
         public static string UpdateRole(int roleId, string roleName, string status)
         {
+            string cs = ConfigurationManager
+                .ConnectionStrings["Pulse360DB"]
+                .ConnectionString;
+
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlCommand cmd = new SqlCommand(@"
-                    UPDATE Role
-                    SET RoleName = @RoleName,
-                        Status = @Status,
-                        ModifiedBy = 'Admin',
-                        ModifiedAt = GETDATE()
-                    WHERE RoleId = @Id", con);
+                using (SqlCommand cmd = new SqlCommand("UpdateRole", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@Id", roleId);
-                cmd.Parameters.AddWithValue("@RoleName", roleName.Trim());
-                cmd.Parameters.AddWithValue("@Status", status);
+                    cmd.Parameters.AddWithValue("@RoleId", roleId);
+                    cmd.Parameters.AddWithValue("@RoleName", roleName.Trim());
+                    cmd.Parameters.AddWithValue("@Status", status);
+                    cmd.Parameters.AddWithValue(
+                        "@ModifiedBy",
+                        HttpContext.Current.Session["UserName"]?.ToString() ?? "Admin"
+                    );
 
-                con.Open();
-                cmd.ExecuteNonQuery();
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
             }
 
             return "updated";
         }
 
+
         // ===================== SOFT DELETE (INACTIVE) =====================
         [WebMethod(EnableSession = true)]
         public static string SoftDeleteRole(int roleId)
         {
+            string cs = ConfigurationManager
+                .ConnectionStrings["Pulse360DB"]
+                .ConnectionString;
+
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlCommand cmd = new SqlCommand(@"
-                    UPDATE Role
-                    SET Status = 'Inactive',
-                        ModifiedBy = 'Admin',
-                        ModifiedAt = GETDATE()
-                    WHERE RoleId = @Id", con);
+                using (SqlCommand cmd = new SqlCommand("SoftDeleteRole", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@Id", roleId);
-                con.Open();
-                cmd.ExecuteNonQuery();
+                    cmd.Parameters.AddWithValue("@RoleId", roleId);
+                    cmd.Parameters.AddWithValue(
+                        "@ModifiedBy",
+                        HttpContext.Current.Session["UserName"]?.ToString() ?? "Admin"
+                    );
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
             }
 
             return "inactive";
         }
 
 
+
         [WebMethod(EnableSession = true)]
         public static string ToggleRoleStatus(int roleId)
         {
+            string cs = ConfigurationManager
+                .ConnectionStrings["Pulse360DB"]
+                .ConnectionString;
+
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlCommand cmd = new SqlCommand(@"
-                    UPDATE [Role]
-                    SET Status = CASE 
-                        WHEN Status = 'Active' THEN 'Inactive'
-                        ELSE 'Active'
-                    END,
-                    ModifiedBy = 'Admin',
-                    ModifiedAt = GETDATE()
-                    WHERE RoleId = @RoleId", con);
+                using (SqlCommand cmd = new SqlCommand("ToggleRoleStatus", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@RoleId", roleId);
+                    cmd.Parameters.AddWithValue("@RoleId", roleId);
+                    cmd.Parameters.AddWithValue(
+                        "@ModifiedBy",
+                        HttpContext.Current.Session["UserName"]?.ToString() ?? "Admin"
+                    );
 
-                con.Open();
-                cmd.ExecuteNonQuery();
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
             }
 
             return "success";
         }
+
         // ===================== DTO =====================
         public class RoleDTO
         {

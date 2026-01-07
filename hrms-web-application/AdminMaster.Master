@@ -56,78 +56,12 @@
 	<!-- Main CSS -->
 	<link rel="stylesheet" href="assets/css/style.css">
 
-<<<<<<< HEAD
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 
 
-<script type="text/javascript">
-    function handleExport(type) {
-        if (type === "PDF") {
-            exportToPDF();
-        } else if (type === "Excel") {
-            exportToExcel();
-        }
-        // Reset dropdown
-        document.getElementById('<%= ddlExport.ClientID %>').selectedIndex = 0;
-    }
 
-    function exportToPDF() {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF('l', 'mm', 'a4');
-
-        
-        doc.setFontSize(18);
-        doc.text('Project List', 14, 15);
-
-       
-        const table = document.getElementById('<%= gvProjects.ClientID %>');
-        doc.autoTable({ 
-            html: table,
-            startY: 25,
-            theme: 'grid',
-            headStyles: { fillColor: [41, 72, 100] }
-        });
-        
-     
-        doc.save('DailyReports.pdf');
-    }
-
-    function exportToExcel() {
-        const table = document.getElementById('<%= gvProjects.ClientID %>');
-
-        const wb = XLSX.utils.table_to_book(table, { sheet: "Projects" });
-
-       
-        const ws = wb.Sheets["Projects"];
-        ws['!cols'] = [
-            { wch: 10 },  
-            { wch: 30 },  
-            { wch: 20 },  
-            { wch: 15 },  
-            { wch: 10 },  
-            { wch: 10 },  
-            { wch: 15 } 
-        ];
-
-       
-        XLSX.writeFile(wb, 'DailyReports.xlsx');
-    }
-
-</script>
-=======
-
-	<!-- Datatable CSS -->
-<link rel="stylesheet" href="assets/css/dataTables.bootstrap5.min.css">
-
-<!-- DataTables Buttons CSS -->
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css">
-
-<!-- Select2 CSS -->
-<link rel="stylesheet" href="assets/plugins/select2/css/select2.min.css">
-
->>>>>>> 0a1e07a3a983928a44b84cce0b08d1afe8375715
 </head>
 
 <body>
@@ -135,13 +69,7 @@
         <div id="global-loader" style="display: none;">
 		<div class="page-loader"></div>
 	</div>
-		<div class="me-2 mb-2">
-    <asp:DropDownList ID="ddlExport" runat="server" CssClass="form-select" AutoPostBack="false" onchange="handleExport(this.value)">
-        <asp:ListItem Text="Select Export" Value=""></asp:ListItem>
-        <asp:ListItem Text="Export as PDF" Value="PDF"></asp:ListItem>
-        <asp:ListItem Text="Export as Excel" Value="Excel"></asp:ListItem>
-    </asp:DropDownList>
-</div>
+
 	<!-- Main Wrapper -->
 	<div class="main-wrapper">
 
@@ -1330,9 +1258,9 @@
 								<span class="menu-arrow"></span>
 				</a>
 				<ul>
-								<li><a href="AddEvent.aspx">Add Event</a></li>
-								<li><a href="AddMasterEvent.aspx">Add Master Event</a></li>
-								<li><a href="EventList.aspx">Event List</a></li>
+								<li><a href="training.html">Add Event</a></li>
+								<li><a href="trainers.html">Add Master Event</a></li>
+								<li><a href="training-type.html">Event List</a></li>
 				</ul>
 </li>
 						<!-- Training -->
@@ -1378,8 +1306,9 @@
 										<span class="menu-arrow"></span>
 									</a>
 									<ul>
-										<li><a href="ProjectList.aspx">Projects</a></li>
-										<li><a href="TaskList.aspx">Tasks</a></li>
+										<li><a href="projects-grid.html">Projects</a></li>
+										<li><a href="tasks.html">Tasks</a></li>
+										<li><a href="task-board.html">TaskBoard</a></li>
 									</ul>
 								</li>
 						<!-- Reports -->
@@ -3833,7 +3762,7 @@
 
 	<!-- Bootstrap Tagsinput JS -->
 	<script src="assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
-	
+
 	<!-- Chart JS -->
 	<script src="assets/plugins/apexchart/apexcharts.min.js"></script>
 	<script src="assets/plugins/apexchart/chart-data.js"></script>
@@ -3841,20 +3770,6 @@
 	<!-- Custom JS -->
 	<script src="assets/js/theme-colorpicker.js"></script>
 	<script src="assets/js/script.js"></script>
-
-	<!--->
-	<!-- DataTables Buttons Extension -->
-<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap5.min.js"></script>
-
-<!-- PDF Export -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
-
-<!-- Excel Export -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-
 
 </body>
 </html>

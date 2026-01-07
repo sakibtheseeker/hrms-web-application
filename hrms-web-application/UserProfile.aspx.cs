@@ -84,8 +84,6 @@ namespace hrms_web_application
 
             int userId = Convert.ToInt32(hdnUserId.Value);
 
-
-
             string bankName = txtAddBankName.Text.Trim();
             string accountNo = txtAddAccountNo.Text.Trim();
             string ifsc = txtAddIFSC.Text.Trim();
@@ -97,7 +95,8 @@ namespace hrms_web_application
                     this, GetType(),
                     "alert",
                     "alert('All bank fields are required');",
-                    true);
+                    true
+                );
                 return;
             }
 
@@ -107,21 +106,19 @@ namespace hrms_web_application
 
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlCommand cmd = new SqlCommand(@"
-            INSERT INTO EmployeeBankDetails
-            (BankName, AccountNumber, IFSCCode, BranchName, UserId)
-            VALUES
-            (@BankName, @AccountNumber, @IFSCCode, @BranchName, @UserId)
-        ", con);
+                using (SqlCommand cmd = new SqlCommand("AddEmployeeBankDetails", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@BankName", bankName);
-                cmd.Parameters.AddWithValue("@AccountNumber", accountNo);
-                cmd.Parameters.AddWithValue("@IFSCCode", ifsc);
-                cmd.Parameters.AddWithValue("@BranchName", branch);
-                cmd.Parameters.AddWithValue("@UserId", userId);
+                    cmd.Parameters.AddWithValue("@BankName", bankName);
+                    cmd.Parameters.AddWithValue("@AccountNumber", accountNo);
+                    cmd.Parameters.AddWithValue("@IFSCCode", ifsc);
+                    cmd.Parameters.AddWithValue("@BranchName", branch);
+                    cmd.Parameters.AddWithValue("@UserId", userId);
 
-                con.Open();
-                cmd.ExecuteNonQuery();
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
             }
 
             // Reload bank list
@@ -137,8 +134,10 @@ namespace hrms_web_application
                 this, GetType(),
                 "success",
                 "$('#addBankDetailsModal').modal('hide'); alert('Bank details saved');",
-                true);
+                true
+            );
         }
+
         protected void btnSaveEducation_Click(object sender, EventArgs e)
         {
             if (Session["UserId"] == null)
@@ -149,7 +148,6 @@ namespace hrms_web_application
 
             int userId = Convert.ToInt32(hdnUserId.Value);
 
-
             string university = txtAddUniversity.Text.Trim();
             string course = txtAddCourse.Text.Trim();
 
@@ -159,12 +157,12 @@ namespace hrms_web_application
                     this, GetType(),
                     "alert",
                     "alert('University and Course are required');",
-                    true);
+                    true
+                );
                 return;
             }
 
             DateTime startDate, endDate;
-
             DateTime.TryParse(txtAddEduStart.Text, out startDate);
             DateTime.TryParse(txtAddEduEnd.Text, out endDate);
 
@@ -174,21 +172,25 @@ namespace hrms_web_application
 
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlCommand cmd = new SqlCommand(@"
-            INSERT INTO EducationDetails
-            (EducationType, UniversityName, startdate, enddate, UserId)
-            VALUES
-            (@EducationType, @UniversityName, @StartDate, @EndDate, @UserId)
-        ", con);
+                using (SqlCommand cmd = new SqlCommand("AddEducationDetails", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@EducationType", course);
-                cmd.Parameters.AddWithValue("@UniversityName", university);
-                cmd.Parameters.AddWithValue("@StartDate", startDate == DateTime.MinValue ? (object)DBNull.Value : startDate);
-                cmd.Parameters.AddWithValue("@EndDate", endDate == DateTime.MinValue ? (object)DBNull.Value : endDate);
-                cmd.Parameters.AddWithValue("@UserId", userId);
+                    cmd.Parameters.AddWithValue("@EducationType", course);
+                    cmd.Parameters.AddWithValue("@UniversityName", university);
+                    cmd.Parameters.AddWithValue(
+                        "@StartDate",
+                        startDate == DateTime.MinValue ? (object)DBNull.Value : startDate
+                    );
+                    cmd.Parameters.AddWithValue(
+                        "@EndDate",
+                        endDate == DateTime.MinValue ? (object)DBNull.Value : endDate
+                    );
+                    cmd.Parameters.AddWithValue("@UserId", userId);
 
-                con.Open();
-                cmd.ExecuteNonQuery();
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
             }
 
             // Reload education list
@@ -204,13 +206,14 @@ namespace hrms_web_application
                 this, GetType(),
                 "eduSaved",
                 "$('#addEducationDetailsModal').modal('hide'); alert('Education added successfully');",
-                true);
+                true
+            );
         }
+
 
         protected void btnSaveExperience_Click(object sender, EventArgs e)
         {
             int userId = Convert.ToInt32(hdnUserId.Value);
-
 
             DateTime fromDate;
             DateTime toDate;
@@ -230,85 +233,96 @@ namespace hrms_web_application
             using (SqlConnection con = new SqlConnection(
                 ConfigurationManager.ConnectionStrings["Pulse360DB"].ConnectionString))
             {
-                SqlCommand cmd = new SqlCommand(@"
-            INSERT INTO Experience
-            (CompanyName, DesignationName, FromDate, ToDate, UserId)
-            VALUES
-            (@CompanyName, @DesignationName, @FromDate, @ToDate, @UserId)", con);
+                using (SqlCommand cmd = new SqlCommand("AddExperienceDetails", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@CompanyName", txtAddCompany.Text.Trim());
-                cmd.Parameters.AddWithValue("@DesignationName", txtAddDesignation.Text.Trim());
-                cmd.Parameters.AddWithValue("@FromDate", fromDate);
-                cmd.Parameters.AddWithValue("@ToDate", toDate);
-                cmd.Parameters.AddWithValue("@UserId", userId);
+                    cmd.Parameters.AddWithValue("@CompanyName", txtAddCompany.Text.Trim());
+                    cmd.Parameters.AddWithValue("@DesignationName", txtAddDesignation.Text.Trim());
+                    cmd.Parameters.AddWithValue("@FromDate", fromDate);
+                    cmd.Parameters.AddWithValue("@ToDate", toDate);
+                    cmd.Parameters.AddWithValue("@UserId", userId);
 
-                con.Open();
-                cmd.ExecuteNonQuery();
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
             }
 
             LoadExperience(userId);
 
-            ScriptManager.RegisterStartupScript(this, GetType(),
-                "expSaved", "$('#addExperienceDetailsModal').modal('hide');", true);
+            ScriptManager.RegisterStartupScript(
+                this,
+                GetType(),
+                "expSaved",
+                "$('#addExperienceDetailsModal').modal('hide');",
+                true
+            );
         }
+
 
         protected void btnSaveFamily_Click(object sender, EventArgs e)
         {
             int userId = Convert.ToInt32(hdnUserId.Value);
 
+            string cs = ConfigurationManager
+                .ConnectionStrings["Pulse360DB"]
+                .ConnectionString;
 
-            using (SqlConnection con = new SqlConnection(
-                ConfigurationManager.ConnectionStrings["Pulse360DB"].ConnectionString))
+            using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlCommand cmd = new SqlCommand(@"
-            INSERT INTO EmployeeFamilyDetails
-            (Name, Relation, DateOfBirth, Phone, UserId)
-            VALUES
-            (@Name, @Relation, @DOB, @Phone, @UserId)", con);
+                using (SqlCommand cmd = new SqlCommand("AddEmployeeFamilyDetails", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@Name", txtAddFamilyName.Text.Trim());
-                cmd.Parameters.AddWithValue("@Relation", txtAddRelation.Text.Trim());
-                cmd.Parameters.AddWithValue("@Phone", txtAddFamilyPhone.Text.Trim());
-                cmd.Parameters.AddWithValue("@UserId", userId);
+                    cmd.Parameters.AddWithValue("@Name", txtAddFamilyName.Text.Trim());
+                    cmd.Parameters.AddWithValue("@Relation", txtAddRelation.Text.Trim());
+                    cmd.Parameters.AddWithValue("@Phone", txtAddFamilyPhone.Text.Trim());
+                    cmd.Parameters.AddWithValue("@UserId", userId);
 
-                if (DateTime.TryParse(txtAddFamilyDOB.Text, out DateTime dob))
-                    cmd.Parameters.AddWithValue("@DOB", dob);
-                else
-                    cmd.Parameters.AddWithValue("@DOB", DBNull.Value);
+                    if (DateTime.TryParse(txtAddFamilyDOB.Text, out DateTime dob))
+                        cmd.Parameters.AddWithValue("@DateOfBirth", dob);
+                    else
+                        cmd.Parameters.AddWithValue("@DateOfBirth", DBNull.Value);
 
-                con.Open();
-                cmd.ExecuteNonQuery();
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
             }
 
             LoadFamilyDetails();
 
             ScriptManager.RegisterStartupScript(
-                this, GetType(),
+                this,
+                GetType(),
                 "familySaved",
                 "$('#addFamilyDetailsModal').modal('hide'); alert('Family member added');",
-                true);
+                true
+            );
         }
+
 
         private void LoadFamilyDetails()
         {
             using (SqlConnection con = new SqlConnection(
                 ConfigurationManager.ConnectionStrings["Pulse360DB"].ConnectionString))
             {
-                SqlDataAdapter da = new SqlDataAdapter(@"
-                    SELECT *
-                    FROM EmployeeFamilyDetails
-                    WHERE UserId = @UserId", con);
+                using (SqlDataAdapter da = new SqlDataAdapter("GetFamilyDetailsByUser", con))
+                {
+                    da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                    da.SelectCommand.Parameters.AddWithValue(
+                        "@UserId",
+                        Convert.ToInt32(hdnUserId.Value)
+                    );
 
-                da.SelectCommand.Parameters.AddWithValue("@UserId", hdnUserId.Value);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
 
-
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-
-                rptFamilyDetails.DataSource = dt;
-                rptFamilyDetails.DataBind();
+                    rptFamilyDetails.DataSource = dt;
+                    rptFamilyDetails.DataBind();
+                }
             }
         }
+
 
         private void LoadProfile(int userId)
         {
@@ -318,91 +332,69 @@ namespace hrms_web_application
 
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlCommand cmd = new SqlCommand(@"
-                    SELECT 
-                        u.UserId,
-                        u.FirstName,
-                        u.LastName,
-                        u.Email,
-                        u.PhoneNumber,
-                        u.Gender,
-                        u.DateOfBirth,
-                        u.Address,
-                        u.AboutEmployee,
-                        u.ProfilePicture,
-                        u.DateOfJoining,
-                        u.ReportingManager,
-                        d.Name AS DepartmentName,
-                        des.Name AS DesignationName
-                    FROM [User] u
-                    LEFT JOIN Departments d 
-                        ON u.DepartmentId = d.DepartmentId
-                    LEFT JOIN Designations des 
-                        ON u.DesignationtId = des.DesignationId
-                    WHERE u.UserId = @UserId
-                ", con);
-
-
-                cmd.Parameters.AddWithValue("@UserId", userId);
-
-                con.Open();
-                SqlDataReader dr = cmd.ExecuteReader();
-
-                if (dr.Read())
+                using (SqlCommand cmd = new SqlCommand("GetUserProfileById", con))
                 {
-                    // 🔹 Top profile section
-                    lblUserId.Text = dr["UserId"].ToString();
-                    lblFullName.Text = dr["FirstName"] + " " + dr["LastName"];
-                    lblEmail.Text = dr["Email"].ToString();
-                    lblPhone.Text = dr["PhoneNumber"].ToString();
-                    lblGender.Text = dr["Gender"]?.ToString();
-                    lblAddress.Text = dr["Address"]?.ToString();
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@UserId", userId);
 
-                    lblDepartment.Text = dr["DepartmentName"]?.ToString();
-                    lblDesignation.Text = dr["DesignationName"]?.ToString();
-                    lblReportManager.Text = dr["ReportingManager"]?.ToString();
-
-                    lblDOJ.Text = dr["DateOfJoining"] == DBNull.Value
-                        ? "-"
-                        : Convert.ToDateTime(dr["DateOfJoining"])
-                            .ToString("dd MMM yyyy");
-
-                    lblDOB.Text = dr["DateOfBirth"] == DBNull.Value
-                        ? "-"
-                        : Convert.ToDateTime(dr["DateOfBirth"])
-                            .ToString("dd MMM yyyy");
-
-                    lblAbout.Text = dr["Address"]?.ToString();
-
-                    // 🔹 Profile Image
-                    if (dr["ProfilePicture"] != DBNull.Value &&
-                        !string.IsNullOrEmpty(dr["ProfilePicture"].ToString()))
+                    con.Open();
+                    using (SqlDataReader dr = cmd.ExecuteReader())
                     {
-                        imgProfile.ImageUrl = dr["ProfilePicture"].ToString();
-                        imgEditProfile.ImageUrl = dr["ProfilePicture"].ToString();
+                        if (dr.Read())
+                        {
+                            // 🔹 Top profile section
+                            lblUserId.Text = dr["UserId"].ToString();
+                            lblFullName.Text = dr["FirstName"] + " " + dr["LastName"];
+                            lblEmail.Text = dr["Email"].ToString();
+                            lblPhone.Text = dr["PhoneNumber"].ToString();
+                            lblGender.Text = dr["Gender"]?.ToString();
+                            lblAddress.Text = dr["Address"]?.ToString();
 
+                            lblDepartment.Text = dr["DepartmentName"]?.ToString();
+                            lblDesignation.Text = dr["DesignationName"]?.ToString();
+                            lblReportManager.Text = dr["ReportingManager"]?.ToString();
 
+                            lblDOJ.Text = dr["DateOfJoining"] == DBNull.Value
+                                ? "-"
+                                : Convert.ToDateTime(dr["DateOfJoining"])
+                                    .ToString("dd MMM yyyy");
+
+                            lblDOB.Text = dr["DateOfBirth"] == DBNull.Value
+                                ? "-"
+                                : Convert.ToDateTime(dr["DateOfBirth"])
+                                    .ToString("dd MMM yyyy");
+
+                            lblAbout.Text = dr["Address"]?.ToString();
+
+                            // 🔹 Profile Image
+                            if (dr["ProfilePicture"] != DBNull.Value &&
+                                !string.IsNullOrEmpty(dr["ProfilePicture"].ToString()))
+                            {
+                                imgProfile.ImageUrl = dr["ProfilePicture"].ToString();
+                                imgEditProfile.ImageUrl = dr["ProfilePicture"].ToString();
+                            }
+                            else
+                            {
+                                imgProfile.ImageUrl = "/assets/img/profiles/default.png";
+                                imgEditProfile.ImageUrl = "/assets/img/profiles/default.png";
+                            }
+
+                            // 🔹 Hidden field for edits
+                            hdnUserId.Value = dr["UserId"].ToString();
+
+                            // 🔹 Edit modal prefill
+                            txtFirstName.Text = dr["FirstName"].ToString();
+                            txtLastName.Text = dr["LastName"].ToString();
+                            txtEmail.Text = dr["Email"].ToString();
+                            txtPhone.Text = dr["PhoneNumber"].ToString();
+                            txtAddress.Text = dr["Address"]?.ToString();
+                            txtDOB.Text = dr["DateOfBirth"] == DBNull.Value
+                                ? ""
+                                : Convert.ToDateTime(dr["DateOfBirth"])
+                                    .ToString("dd/MM/yyyy");
+                            txtAbout.Text = dr["Address"]?.ToString();
+                        }
                     }
-                    else
-                    {
-                        imgProfile.ImageUrl = "/assets/img/profiles/default.png";
-                        imgEditProfile.ImageUrl = "/assets/img/profiles/default.png";
-
-                    }
-
-                    // 🔹 Hidden field for edits
-                    hdnUserId.Value = dr["UserId"].ToString();
-
-                    // 🔹 Edit modal prefill
-                    txtFirstName.Text = dr["FirstName"].ToString();
-                    txtLastName.Text = dr["LastName"].ToString();
-                    txtEmail.Text = dr["Email"].ToString();
-                    txtPhone.Text = dr["PhoneNumber"].ToString();
-                    txtAddress.Text = dr["Address"]?.ToString();
-                    txtDOB.Text = dr["DateOfBirth"] == DBNull.Value
-                        ? ""
-                        : Convert.ToDateTime(dr["DateOfBirth"]).ToString("dd/MM/yyyy");
-                    txtAbout.Text = dr["Address"]?.ToString();
                 }
             }
         }
@@ -415,26 +407,20 @@ namespace hrms_web_application
 
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlDataAdapter da = new SqlDataAdapter(@"
-            SELECT
-                ExperienceId,
-                CompanyName,
-                DesignationName,
-                FromDate,
-                ToDate
-            FROM Experience
-            WHERE UserId = @UserId
-            ORDER BY FromDate DESC", con);
+                using (SqlDataAdapter da = new SqlDataAdapter("GetExperienceByUser", con))
+                {
+                    da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                    da.SelectCommand.Parameters.AddWithValue("@UserId", userId);
 
-                da.SelectCommand.Parameters.AddWithValue("@UserId", userId);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
 
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-
-                rptExperience.DataSource = dt;
-                rptExperience.DataBind();
+                    rptExperience.DataSource = dt;
+                    rptExperience.DataBind();
+                }
             }
         }
+
 
         private void LoadFamilyDetails(int userId)
         {
@@ -444,26 +430,20 @@ namespace hrms_web_application
 
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlDataAdapter da = new SqlDataAdapter(@"
-                    SELECT
-                        FamilyDetailId,
-                        Name,
-                        Relation,
-                        DateOfBirth,
-                        phone
-                    FROM EmployeeFamilyDetails
-                    WHERE UserId = @UserId
-                    ORDER BY FamilyDetailId DESC", con);
+                using (SqlDataAdapter da = new SqlDataAdapter("GetFamilyDetailsByUserId", con))
+                {
+                    da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                    da.SelectCommand.Parameters.AddWithValue("@UserId", userId);
 
-                da.SelectCommand.Parameters.AddWithValue("@UserId", userId);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
 
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-
-                rptFamilyDetails.DataSource = dt;
-                rptFamilyDetails.DataBind();
+                    rptFamilyDetails.DataSource = dt;
+                    rptFamilyDetails.DataBind();
+                }
             }
         }
+
 
         private void LoadBankDetails(int userId)
         {
@@ -473,25 +453,20 @@ namespace hrms_web_application
 
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlDataAdapter da = new SqlDataAdapter(@"
-                    SELECT 
-                        BankDetailId,
-                        BankName,
-                        AccountNumber,
-                        IFSCCode,
-                        BranchName
-                    FROM EmployeeBankDetails
-                    WHERE UserId = @UserId", con);
+                using (SqlDataAdapter da = new SqlDataAdapter("GetBankDetailsByUserId", con))
+                {
+                    da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                    da.SelectCommand.Parameters.AddWithValue("@UserId", userId);
 
-                da.SelectCommand.Parameters.AddWithValue("@UserId", userId);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
 
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-
-                rptBankDetails.DataSource = dt;
-                rptBankDetails.DataBind();
+                    rptBankDetails.DataSource = dt;
+                    rptBankDetails.DataBind();
+                }
             }
         }
+
 
         private void LoadEducation(int userId)
         {
@@ -501,26 +476,20 @@ namespace hrms_web_application
 
             using (SqlConnection con = new SqlConnection(cs))
             {
-                SqlDataAdapter da = new SqlDataAdapter(@"
-                    SELECT
-                        EducationDetailsId,
-                        EducationType,
-                        UniversityName,
-                        startdate,
-                        enddate
-                    FROM EducationDetails
-                    WHERE UserId = @UserId
-                    ORDER BY startdate DESC", con);
+                using (SqlDataAdapter da = new SqlDataAdapter("GetEducationDetailsByUserId", con))
+                {
+                    da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                    da.SelectCommand.Parameters.AddWithValue("@UserId", userId);
 
-                da.SelectCommand.Parameters.AddWithValue("@UserId", userId);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
 
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-
-                rptEducation.DataSource = dt;
-                rptEducation.DataBind();
+                    rptEducation.DataSource = dt;
+                    rptEducation.DataBind();
+                }
             }
         }
+
 
         protected void btnSaveProfile_Click(object sender, EventArgs e)
         {
@@ -571,43 +540,44 @@ namespace hrms_web_application
             using (SqlConnection con = new SqlConnection(
                 ConfigurationManager.ConnectionStrings["Pulse360DB"].ConnectionString))
             {
-                SqlCommand cmd = new SqlCommand(@"
-                    UPDATE [User]
-                    SET 
-                        FirstName = @FirstName,
-                        LastName = @LastName,
-                        Email = @Email,
-                        PhoneNumber = @Phone,
-                        DateOfBirth = @DOB,
-                        Address = @Address,
-                        AboutEmployee = @About
-                        " + (profileImagePath != null ? ", ProfilePicture = @ProfilePicture" : "") + @"
-                    WHERE UserId = @UserId", con);
-
-                cmd.Parameters.AddWithValue("@FirstName", txtFirstName.Text.Trim());
-                cmd.Parameters.AddWithValue("@LastName", txtLastName.Text.Trim());
-                cmd.Parameters.AddWithValue("@Email", txtEmail.Text.Trim());
-                cmd.Parameters.AddWithValue("@Phone", txtPhone.Text.Trim());
-                cmd.Parameters.AddWithValue("@DOB", txtDOB.Text);
-                cmd.Parameters.AddWithValue("@Address", txtAddress.Text.Trim());
-                cmd.Parameters.AddWithValue("@About", txtAbout.Text.Trim());
-                cmd.Parameters.AddWithValue("@UserId", userId);
-
-                if (profileImagePath != null)
+                using (SqlCommand cmd = new SqlCommand("UpdateUserProfile", con))
                 {
-                    cmd.Parameters.AddWithValue("@ProfilePicture", profileImagePath);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@UserId", userId);
+                    cmd.Parameters.AddWithValue("@FirstName", txtFirstName.Text.Trim());
+                    cmd.Parameters.AddWithValue("@LastName", txtLastName.Text.Trim());
+                    cmd.Parameters.AddWithValue("@Email", txtEmail.Text.Trim());
+                    cmd.Parameters.AddWithValue("@PhoneNumber", txtPhone.Text.Trim());
+                    cmd.Parameters.AddWithValue("@DateOfBirth", DateTime.Parse(txtDOB.Text));
+                    cmd.Parameters.AddWithValue("@Address", txtAddress.Text.Trim());
+                    cmd.Parameters.AddWithValue("@AboutEmployee", txtAbout.Text.Trim());
+
+                    // ✅ Always send parameter
+                    cmd.Parameters.AddWithValue(
+                        "@ProfilePicture",
+                        string.IsNullOrEmpty(profileImagePath)
+                            ? (object)DBNull.Value
+                            : profileImagePath
+                    );
+
+
+                    if (profileImagePath != null)
+                    {
+                        cmd.Parameters.AddWithValue("@ProfilePicture", profileImagePath);
+                    }
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
                 }
 
-                con.Open();
-                cmd.ExecuteNonQuery();
+                // ✅ Reload data
+                LoadUserProfile();
+
+                // ✅ Show success modal
+                ScriptManager.RegisterStartupScript(this, GetType(),
+                    "success", "$('#success_modal').modal('show');", true);
             }
-
-            // ✅ Reload data
-            LoadUserProfile();
-
-            // ✅ Show success modal
-            ScriptManager.RegisterStartupScript(this, GetType(),
-                "success", "$('#success_modal').modal('show');", true);
         }
 
         private void LoadUserProfile()
@@ -615,56 +585,55 @@ namespace hrms_web_application
             using (SqlConnection con = new SqlConnection(
                 ConfigurationManager.ConnectionStrings["Pulse360DB"].ConnectionString))
             {
-                SqlCommand cmd = new SqlCommand(@"
-            SELECT *
-            FROM [User]
-            WHERE UserId = @UserId", con);
-
-                cmd.Parameters.AddWithValue("@UserId", hdnUserId.Value);
-
-
-                con.Open();
-                SqlDataReader dr = cmd.ExecuteReader();
-
-                if (dr.Read())
+                using (SqlCommand cmd = new SqlCommand("GetUserProfileBasicById", con))
                 {
-                    lblFullName.Text = dr["FirstName"] + " " + dr["LastName"];
-                    lblEmail.Text = dr["Email"].ToString();
-                    lblPhone.Text = dr["PhoneNumber"].ToString();
-                    lblGender.Text = dr["Gender"]?.ToString();
-                    lblDOB.Text = dr["DateOfBirth"]?.ToString();
-                    lblAddress.Text = dr["Address"]?.ToString();
-                    lblAbout.Text = dr["AboutEmployee"]?.ToString();
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue(
+                        "@UserId",
+                        Convert.ToInt32(hdnUserId.Value)
+                    );
 
-                    txtFirstName.Text = dr["FirstName"].ToString();
-                    txtLastName.Text = dr["LastName"].ToString();
-                    txtEmail.Text = dr["Email"].ToString();
-                    txtPhone.Text = dr["PhoneNumber"].ToString();
-                    txtAbout.Text = dr["AboutEmployee"]?.ToString();
-
-                    if (dr["ProfilePicture"] != DBNull.Value &&
-                     !string.IsNullOrWhiteSpace(dr["ProfilePicture"].ToString()))
+                    con.Open();
+                    using (SqlDataReader dr = cmd.ExecuteReader())
                     {
-                        string imgPath = dr["ProfilePicture"].ToString().Trim();
-
-                        // normalize path
-                        if (!imgPath.StartsWith("/"))
+                        if (dr.Read())
                         {
-                            imgPath = "/" + imgPath;
+                            lblFullName.Text = dr["FirstName"] + " " + dr["LastName"];
+                            lblEmail.Text = dr["Email"].ToString();
+                            lblPhone.Text = dr["PhoneNumber"].ToString();
+                            lblGender.Text = dr["Gender"]?.ToString();
+                            lblDOB.Text = dr["DateOfBirth"]?.ToString();
+                            lblAddress.Text = dr["Address"]?.ToString();
+                            lblAbout.Text = dr["AboutEmployee"]?.ToString();
+
+                            txtFirstName.Text = dr["FirstName"].ToString();
+                            txtLastName.Text = dr["LastName"].ToString();
+                            txtEmail.Text = dr["Email"].ToString();
+                            txtPhone.Text = dr["PhoneNumber"].ToString();
+                            txtAbout.Text = dr["AboutEmployee"]?.ToString();
+
+                            if (dr["ProfilePicture"] != DBNull.Value &&
+                                !string.IsNullOrWhiteSpace(dr["ProfilePicture"].ToString()))
+                            {
+                                string imgPath = dr["ProfilePicture"].ToString().Trim();
+
+                                // normalize path
+                                if (!imgPath.StartsWith("/"))
+                                    imgPath = "/" + imgPath;
+
+                                imgProfile.ImageUrl = ResolveUrl(imgPath);
+                                imgEditProfile.ImageUrl = ResolveUrl(imgPath);
+                            }
+                            else
+                            {
+                                imgProfile.ImageUrl = ResolveUrl("/assets/img/profiles/default.png");
+                                imgEditProfile.ImageUrl = ResolveUrl("/assets/img/profiles/default.png");
+                            }
                         }
-
-                        imgProfile.ImageUrl = ResolveUrl(imgPath);
-                        imgEditProfile.ImageUrl = ResolveUrl(imgPath);
                     }
-                    else
-                    {
-                        imgProfile.ImageUrl = ResolveUrl("/assets/img/profiles/default.png");
-                        imgEditProfile.ImageUrl = ResolveUrl("/assets/img/profiles/default.png");
-                    }
-
-
                 }
             }
         }
+
     }
 }
