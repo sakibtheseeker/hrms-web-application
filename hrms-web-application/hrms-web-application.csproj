@@ -1056,16 +1056,13 @@
     <Content Include="assets\js\counter.js" />
     <Content Include="assets\js\custom-select2.js" />
     <Content Include="assets\js\dataTables.bootstrap5.min.js" />
-<<<<<<< Updated upstream
     <Content Include="assets\js\email.js" />
     <Content Include="assets\js\employee-salary.js" />
-=======
     <Content Include="assets\js\departments.js" />
     <Content Include="assets\js\designation.js" />
     <Content Include="assets\js\email.js" />
     <Content Include="assets\js\employee-salary.js" />
     <Content Include="assets\js\employeesbydepartment.js" />
->>>>>>> Stashed changes
     <Content Include="assets\js\estimates.js" />
     <Content Include="assets\js\feather.min.js" />
     <Content Include="assets\js\file-manager.js" />
@@ -1101,10 +1098,7 @@
     <Content Include="assets\js\projects.js" />
     <Content Include="assets\js\quill-editor.js" />
     <Content Include="assets\js\ratings.js" />
-<<<<<<< Updated upstream
-=======
     <Content Include="assets\js\role.js" />
->>>>>>> Stashed changes
     <Content Include="assets\js\russia.js" />
     <Content Include="assets\js\salary-settings.js" />
     <Content Include="assets\js\script.js" />
@@ -2059,7 +2053,6 @@
     <Content Include="assets\plugins\twitter-bootstrap-wizard\form-wizard.js" />
     <Content Include="assets\plugins\twitter-bootstrap-wizard\jquery.bootstrap.wizard.min.js" />
     <Content Include="assets\plugins\twitter-bootstrap-wizard\prettify.js" />
-<<<<<<< Updated upstream
     <Content Include="CalendarEvent.aspx" />
     <Content Include="EditProject.aspx" />
     <Content Include="EmployeeTickets.aspx" />
@@ -2104,7 +2097,6 @@
     </Compile>
     <Compile Include="AdminAssignTickets.aspx.designer.cs">
       <DependentUpon>AdminAssignTickets.aspx</DependentUpon>
-=======
     <Content Include="Content\Logos\logo1.png" />
     <Content Include="Content\Logos\rt1.png" />
     <Content Include="Content\Logos\rt2.png" />
@@ -2186,7 +2178,6 @@
     </Compile>
     <Compile Include="AdminDashboard.aspx.designer.cs">
       <DependentUpon>AdminDashboard.aspx</DependentUpon>
->>>>>>> Stashed changes
     </Compile>
     <Compile Include="AdminMaster.Master.cs">
       <DependentUpon>AdminMaster.Master</DependentUpon>
@@ -2195,7 +2186,6 @@
     <Compile Include="AdminMaster.Master.designer.cs">
       <DependentUpon>AdminMaster.Master</DependentUpon>
     </Compile>
-<<<<<<< Updated upstream
     <Compile Include="CalendarEvent.aspx.cs">
       <DependentUpon>CalendarEvent.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2209,7 +2199,6 @@
     </Compile>
     <Compile Include="EditProject.aspx.designer.cs">
       <DependentUpon>EditProject.aspx</DependentUpon>
-=======
     <Compile Include="EmployeeDashboard.aspx.cs">
       <DependentUpon>EmployeeDashboard.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2230,7 +2219,6 @@
     </Compile>
     <Compile Include="EmployeeList.aspx.designer.cs">
       <DependentUpon>EmployeeList.aspx</DependentUpon>
->>>>>>> Stashed changes
     </Compile>
     <Compile Include="EmployeeMaster.Master.cs">
       <DependentUpon>EmployeeMaster.Master</DependentUpon>
@@ -2239,7 +2227,6 @@
     <Compile Include="EmployeeMaster.Master.designer.cs">
       <DependentUpon>EmployeeMaster.Master</DependentUpon>
     </Compile>
-<<<<<<< Updated upstream
     <Compile Include="EmployeeTickets.aspx.cs">
       <DependentUpon>EmployeeTickets.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2280,7 +2267,6 @@
   <ItemGroup>
     <Content Include="AdminMaster.Master" />
     <Content Include="EmployeeMaster.Master" />
-=======
     <Compile Include="Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2298,7 +2284,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
->>>>>>> Stashed changes
     <Content Include="assets\css\bootstrap.min.css.map" />
     <Content Include="assets\css\bootstrap.rtl.min.css.map" />
     <Content Include="assets\css\style.css.map" />
