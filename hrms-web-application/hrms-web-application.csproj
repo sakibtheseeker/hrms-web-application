@@ -11863,8 +11863,6 @@
     <Content Include="assets\scss\vendors\_datatables.scss" />
     <Content Include="assets\scss\vendors\_rangepicker-plugin.scss" />
     <Content Include="assets\scss\vendors\_select2.scss" />
-<<<<<<< Updated upstream
-=======
     <Content Include="Content\Logos.zip" />
     <Content Include="Content\offer-letters\Offer-letter15782767.pdf" />
     <Content Include="Content\offer-letters\Offer-letter32087786.pdf" />
@@ -11878,7 +11876,6 @@
     <Content Include="Content\resignation-letters\Resignation-letter4307704.pdf" />
     <Content Include="AdminMaster.Master" />
     <Content Include="EmployeeMaster.Master" />
->>>>>>> Stashed changes
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
