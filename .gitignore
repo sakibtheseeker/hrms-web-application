@@ -1,4 +1,4 @@
-﻿# Build output
+# Build output
 bin/
 obj/
 
@@ -27,3 +27,5 @@ web.config
 DocumentLayout.json
 dbcache.json
 dtbcache.json
+Debug/
+Release/
