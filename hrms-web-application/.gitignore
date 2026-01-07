@@ -43,3 +43,30 @@ Thumbs.db
 # Local config (do NOT commit)
 # ===============================
 web.config
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build folders
+bin/
+obj/
+
+# ASP.NET Core
+appsettings.json
+appsettings.*.json
+
+# IIS / config
+*.config
+*.config.user
+
+# Logs
+*.log
+
+# OS files
+Thumbs.db
+.DS_Store
+
