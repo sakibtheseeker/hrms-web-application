@@ -1,29 +1,45 @@
-﻿# Build output
+# ===============================
+# Build output
+# ===============================
 bin/
 obj/
+Debug/
+Release/
 
+# ===============================
 # Visual Studio files
+# ===============================
 .vs/
 *.user
 *.suo
+*.csproj.user
 
+# ===============================
 # ASP.NET temp files
+# ===============================
 Temporary ASP.NET Files/
 
+# ===============================
 # NuGet
+# ===============================
 packages/
 
-# Logs
+# ===============================
+# Logs & cache
+# ===============================
 *.log
-
-# OS files
-Thumbs.db
-.DS_Store
-
-# Ignore local web.config (everyone has different config)
-web.config
-
-# Visual Studio layout files
+*.cache
 DocumentLayout.json
 dbcache.json
 dtbcache.json
+
+# ===============================
+# OS files
+# ===============================
+Thumbs.db
+.DS_Store
+
+# ===============================
+# Local config (do NOT commit)
+# ===============================
+web.config
