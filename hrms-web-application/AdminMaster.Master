@@ -1330,18 +1330,27 @@
 
 						<!-- Attendance -->
 								<li class="submenu">
-									<a href="javascript:void(0);">
-										<i class="ti ti-file-time"></i><span>Attendance</span>
-										<span class="menu-arrow"></span>
-									</a>
-									
-											<ul>
-												<li><a href="leaves.html" >Leaves</a></li>
-												<li><a href="leaves-employee.html">Attendance (Admin)</a></li>
-												<li><a href="leave-settings.html">Timesheet</a></li>
-											</ul>
-									
-								</li>
+    <a href="javascript:void(0);">
+        <i class="ti ti-file-time"></i>
+        <span>Attendance</span>
+        <span class="menu-arrow"></span>
+    </a>
+
+    <ul>
+        <li><a href="AddLeaveType.aspx">Add Leave Type</a></li>
+        <li><a href="AddLeaveDeptWise.aspx">Add Leave DeptWise</a></li>
+        <li><a href="LeaveDetailsForAdmin.aspx">Leave Details For Admin</a></li>
+        <li><a href="LeaveSetting.aspx">Leave Setting</a></li>
+		 	        <li><a href="AttendaceSummeryAdmin.aspx">Attendance Summary Admin</a></li>
+        <li><a href="AdminApproveLeave.aspx"> Approve Leaves</a></li>
+
+        <li><a href="AdminTimesheet.aspx"> Timesheet details</a></li>
+
+
+    </ul>
+
+</li>
+
 
 						<!-- Payroll -->
 								<li class="submenu">
