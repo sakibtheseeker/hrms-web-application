@@ -8,11 +8,9 @@ namespace hrms_web_application
 {
     public partial class ProjectList : System.Web.UI.Page
     {
-        // SQL connection
         SqlConnection con = new SqlConnection(
             ConfigurationManager.ConnectionStrings["Pulse360DB"].ConnectionString);
 
-        // Page Load
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -30,13 +28,11 @@ namespace hrms_web_application
             }
         }
 
-        // Dropdown change
         protected void FilterChanged(object sender, EventArgs e)
         {
             LoadProjects();
         }
 
-        // Load project list
         void LoadProjects()
         {
             SqlCommand cmd = new SqlCommand(
@@ -58,20 +54,17 @@ namespace hrms_web_application
             {
                 int projectId = Convert.ToInt32(row["ProjectId"]);
 
-                // Priority color
                 string priority = row["Priority"].ToString();
                 row["PriorityText"] =
                     priority == "High" ? "text-danger" :
                     priority == "Medium" ? "text-warning" :
                     "text-success";
 
-                // Status badge
                 row["StatusClass"] =
                     row["Status"].ToString() == "Active"
                     ? "bg-success"
                     : "bg-danger";
 
-                // Team members
                 row["MembersHtml"] = GetProjectMembers(projectId);
             }
 
@@ -79,7 +72,6 @@ namespace hrms_web_application
             rptProjects.DataBind();
         }
 
-        // Get project members
         string GetProjectMembers(int projectId)
         {
             string html = "";
@@ -115,7 +107,6 @@ namespace hrms_web_application
             return html;
         }
 
-        // Soft delete
         protected void DeleteProject(string projectId)
         {
             SqlCommand cmd = new SqlCommand("sp_SoftDeleteProject", con);
@@ -129,7 +120,6 @@ namespace hrms_web_application
             LoadProjects();
         }
 
-        // Add Project button
         protected void btnAddProject_Click(object sender, EventArgs e)
         {
             Response.Redirect("AddProject.aspx");

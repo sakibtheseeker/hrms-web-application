@@ -2047,6 +2047,7 @@
     <Content Include="EditProject.aspx" />
     <Content Include="EmployeeTickets.aspx" />
     <Content Include="EventList.aspx" />
+    <Content Include="Login.aspx" />
     <Content Include="ProjectList.aspx" />
     <Content Include="SolutionTicket.aspx" />
     <Content Include="TaskList.aspx" />
@@ -2129,6 +2130,13 @@
     </Compile>
     <Compile Include="EventList.aspx.designer.cs">
       <DependentUpon>EventList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
     <Compile Include="ProjectList.aspx.cs">
       <DependentUpon>ProjectList.aspx</DependentUpon>

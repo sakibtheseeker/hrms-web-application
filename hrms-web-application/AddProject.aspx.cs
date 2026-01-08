@@ -21,14 +21,12 @@ namespace hrms_web_application
             if (!IsPostBack)
             {
                 LoadPriceTypes();
-                LoadUsers();      // Team Members
-                LoadManagers();   // Only Managers (via SP)
+                LoadUsers();      
+                LoadManagers();  
             }
         }
 
-        // -------------------------------
-        // LOAD PRICE TYPES
-        // -------------------------------
+      
         void LoadPriceTypes()
         {
             ddlPriceType.Items.Clear();
@@ -38,9 +36,7 @@ namespace hrms_web_application
             ddlPriceType.Items.Add("€");
         }
 
-        // -------------------------------
-        // LOAD TEAM MEMBERS (ALL ACTIVE USERS)
-        // -------------------------------
+      
         void LoadUsers()
         {
             SqlCommand cmd = new SqlCommand(
@@ -58,9 +54,7 @@ namespace hrms_web_application
             con.Close();
         }
 
-        // -------------------------------
-        // LOAD MANAGERS (USING STORED PROCEDURE)
-        // -------------------------------
+        
         void LoadManagers()
         {
             SqlCommand cmd = new SqlCommand(
@@ -74,7 +68,6 @@ namespace hrms_web_application
             ddlManager.DataSource = dr;
             ddlManager.DataTextField = "FirstName";
             ddlManager.DataValueField = "FirstName";
-            // ManagerName column stores name, not ID
 
             ddlManager.DataBind();
 
@@ -84,22 +77,17 @@ namespace hrms_web_application
             ddlManager.Items.Insert(0, "Select Project Manager");
         }
 
-        // -------------------------------
-        // SAVE BUTTON CLICK
-        // -------------------------------
+        
         protected void btnSave_Click(object sender, EventArgs e)
         {
-            // 🔴 STEP 1: VALIDATE FORM
             if (!ValidateForm())
             {
-                return; // Stop execution if validation fails
+                return; 
             }
 
-            // 🔴 STEP 2: SAVE FILES
             string logoPath = SaveFile(fuLogo);
             string filePath = SaveFile(fuFile);
 
-            // 🔴 STEP 3: INSERT PROJECT (STORED PROCEDURE)
             SqlCommand cmd = new SqlCommand(
                 "sp_AllProjects_Insert", con);
 
@@ -122,16 +110,12 @@ namespace hrms_web_application
             int projectId = Convert.ToInt32(cmd.ExecuteScalar());
             con.Close();
 
-            // 🔴 STEP 4: SAVE TEAM MEMBERS
             SaveTeamMembers(projectId);
 
-            // 🔴 STEP 5: REDIRECT
             Response.Redirect("ProjectList.aspx");
         }
 
-        // -------------------------------
-        // VALIDATIONS (REQUIRED, DATE, NUMERIC)
-        // -------------------------------
+       
         bool ValidateForm()
         {
             // Required fields
@@ -189,7 +173,6 @@ namespace hrms_web_application
                 return false;
             }
 
-            // Date validation
             DateTime startDate = Convert.ToDateTime(txtStartDate.Text);
             DateTime endDate = Convert.ToDateTime(txtEndDate.Text);
 
@@ -199,7 +182,6 @@ namespace hrms_web_application
                 return false;
             }
 
-            // Numeric validation
             double projectValue;
             if (!double.TryParse(txtProjectValue.Text, out projectValue))
             {
@@ -213,12 +195,10 @@ namespace hrms_web_application
                 return false;
             }
 
-            return true; // All validations passed
+            return true; 
         }
 
-        // -------------------------------
-        // ALERT MESSAGE
-        // -------------------------------
+       
         void ShowAlert(string message)
         {
             ScriptManager.RegisterStartupScript(
@@ -229,9 +209,7 @@ namespace hrms_web_application
                 true);
         }
 
-        // -------------------------------
-        // SAVE TEAM MEMBERS
-        // -------------------------------
+       
         void SaveTeamMembers(int projectId)
         {
             foreach (ListItem item in chkUsers.Items)
@@ -251,9 +229,7 @@ namespace hrms_web_application
             }
         }
 
-        // -------------------------------
-        // FILE UPLOAD
-        // -------------------------------
+        
         string SaveFile(FileUpload fu)
         {
             if (fu.HasFile)
