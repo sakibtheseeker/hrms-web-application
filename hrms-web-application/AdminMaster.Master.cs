@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -16,7 +16,7 @@ namespace hrms_web_application
             LoadHeaderUser();
             if (!IsPostBack)
             {
-
+                
             }
         }
 
@@ -101,4 +101,3 @@ namespace hrms_web_application
         }
     }
 }
-
